@@ -1,0 +1,40 @@
+# Ignore Python cache in backend
+backend/**/__pycache__/
+backend/**/*.py[cod]
+
+# Ignore virtual environments in backend
+backend/env/
+backend/venv/
+backend/.venv/
+backend/ENV/
+
+# Ignore environment variables
+*.env
+backend/app/.env
+
+# VS Code settings
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs and other
+*.log
+
+# Node/React (frontend)
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+
+# Test, coverage, and misc
+.pytest_cache/
+coverage/
+htmlcov/
+*.sqlite3
+*.db
+
+# Editor-specific
+.idea/
+*.swp
+*.swo
