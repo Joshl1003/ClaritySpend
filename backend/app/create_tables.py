@@ -1,5 +1,5 @@
 from database import engine
-from backend.app.models import models  # import all model files
+from backend.app.models import user, category, transaction, budget  # import all model files
 from database import Base
 
 def create_db():
