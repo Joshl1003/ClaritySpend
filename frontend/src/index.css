@@ -1,0 +1,12 @@
+body {
+  font-family: system-ui, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  text-align: center;
+  padding-top: 4rem;
+}
