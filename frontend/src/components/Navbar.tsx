@@ -1,15 +1,29 @@
-import { Link } from "react-router-dom";
+
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu";
 
 export default function Navbar() {
   return (
-    <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between">
-      <h1 className="font-bold text-lg">ClaritySpend</h1>
-      <div className="flex gap-4">
-        <Link to="/">Home</Link>
-        <Link to="/transactions">Transactions</Link>
-        <Link to="/budgets">Budgets</Link>
-        <Link to="/categories">Categories</Link>
-      </div>
-    </nav>
+    <NavigationMenu>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuLink href="/">Home</NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink href="/transactions">Transactions</NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink href="/budgets">Budgets</NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink href="/categories">Categories</NavigationMenuLink>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }
+

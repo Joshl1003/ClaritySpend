@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from schemas.category_schema import CategoryCreate, CategoryOut
-from crud.category_crud import list_categories, create_category
-from database import get_db
+from app.schemas.category_schema import CategoryCreate, CategoryOut
+from app.crud.category_crud import list_categories, create_category
+from app.database.connection import get_db
 
-router = APIRouter()
+
+
+router = APIRouter(prefix="/categories", tags=["Categories"])
 
 @router.post("/", response_model=CategoryOut)
 def create_category_endpoint(payload: CategoryCreate, db: Session = Depends(get_db)):

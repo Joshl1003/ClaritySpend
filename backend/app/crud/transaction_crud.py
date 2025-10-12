@@ -1,4 +1,4 @@
-from models.transaction import Transaction
+from app.models.transaction import Transaction
 
 def list_transactions(db, user_id: int = None, limit: int = 100):
     q = db.query(Transaction).order_by(Transaction.date.desc())

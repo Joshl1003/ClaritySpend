@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from schemas.transaction_schema import TransactionCreate, TransactionOut
-from crud.transaction_crud import list_transactions, create_transaction
-from database import get_db
+from app.schemas.transaction_schema import TransactionCreate, TransactionOut
+from app.crud.transaction_crud import list_transactions, create_transaction
+from app.database.connection import get_db
 
-router = APIRouter()
+
+
+router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
 @router.post("/", response_model=TransactionOut)
 def create_tx(payload: TransactionCreate, db: Session = Depends(get_db)):

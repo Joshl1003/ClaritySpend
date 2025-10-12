@@ -1,4 +1,4 @@
-from models.category import Category
+from app.models.category import Category
 
 def list_categories(db, user_id: int = None):
     q = db.query(Category)

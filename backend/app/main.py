@@ -1,22 +1,16 @@
-from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
-from .database import SessionLocal, engine
-from . import models
-from .models import Base
+from fastapi import FastAPI
+from app.routes import budget_router
+from app.database.database import Base, engine
 
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Dependency to get DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+app.include_router(budget_router.router)
 
 @app.get("/")
 def root():
     return {"message": "Welcome to ClaritySpend backend!"}
+
+
 

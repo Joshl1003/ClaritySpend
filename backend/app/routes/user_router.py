@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.user_schema import UserCreate, UserOut
-from crud.user_crud import get_user, get_user_by_email, create_user
-from database import get_db
+from app.schemas.user_schema import UserCreate, UserOut
+from app.crud.user_crud import get_user, get_user_by_email, create_user
+from app.database.connection import get_db
 
-router = APIRouter()
+
+
+router = APIRouter(prefix="/users", tags=["Users"])
 
 @router.post("/", response_model=UserOut)
 def create_user_endpoint(payload: UserCreate, db: Session = Depends(get_db)):
