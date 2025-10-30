@@ -25,6 +25,8 @@ Built with a clean **FastAPI backend** and a **React + TypeScript frontend**, Cl
 - React Router DOM 7.9.3
 - PostCSS & CSS animation utilities
 - Type-safe component merging and styling utilities
+- chart.js react-chartjs-2
+
 
 ### **Backend**
 - FastAPI 0.116.1
