@@ -1,0 +1,42 @@
+
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    container_name: clarity-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Masterlee1!
+      POSTGRES_DB: ClaritySpend
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: clarity-backend
+    environment:
+      DATABASE_URL: "postgresql://postgres:Masterlee1!@host.docker.internal:5432/ClaritySpend"
+      
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: clarity-frontend
+    environment:
+      VITE_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  dbdata:

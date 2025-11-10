@@ -1,0 +1,35 @@
+#! backend-deployment.yaml
+# Generated code, do not edit
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: backend
+    namespace: clarityspend
+    labels:
+        com.docker.compose.project: clarityspend
+        com.docker.compose.service: backend
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            com.docker.compose.project: clarityspend
+            com.docker.compose.service: backend
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                com.docker.compose.project: clarityspend
+                com.docker.compose.service: backend
+                com.docker.compose.network.default: "true"
+        spec:
+            containers:
+                - name: clarity-backend
+                  image: clarityspend-backend
+                  imagePullPolicy: IfNotPresent
+                  env:
+                    - name: DATABASE_URL
+                      value: "postgresql://postgres:Masterlee1!@host.docker.internal:5432/ClaritySpend"
+                  ports:
+                    - name: backend-8000
+                      containerPort: 8000
