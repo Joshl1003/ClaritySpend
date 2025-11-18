@@ -13,10 +13,11 @@ def create_budget(db, user_id: int, category_id: int, amount: float, period: str
     return b
 
 def delete_budget(db: Session, budget_id: int):
-    b = db.query(Budget).filter(Budget.id).first()
+    b = db.query(Budget).filter(Budget.id == budget_id).first()
     if not b:
         raise HTTPException(status_code=404, detail="Budget not found")
     db.delete(b)
     db.commit()
     return b
 
+# def edit_budget

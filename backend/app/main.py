@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.routes import budget_router
-from app.database.database import Base, engine
+from backend.app.database.database import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 
 origins = [

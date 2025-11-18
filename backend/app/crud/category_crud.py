@@ -22,3 +22,5 @@ def delete_category(db: Session, category_id: int):
     db.delete(c)
     db.commit()
     return c
+
+#def edit category

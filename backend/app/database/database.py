@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
+Base = declarative_base()
 # Load environment variables
 env_path = Path(__file__).resolve().parents[1] / ".env"  # go up 1 level from /database/
 load_dotenv(dotenv_path=env_path)

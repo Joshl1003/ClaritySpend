@@ -24,3 +24,5 @@ def delete_transaction(db: Session, transaction_id: int):
     db.delete(t)
     db.commit()
     return t
+
+#def edit_transaction
