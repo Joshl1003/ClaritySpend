@@ -41,11 +41,14 @@ def run():
             cats.append(category)
 
         # budget per each category
+        id = 0
         for c in cats:
             exists = db.query(Budget).filter(Budget.user_id == user.id, Budget.category_id == c.id).scalar()
 
             if not exists: 
+                id += 1
                 budget = Budget(
+                    name = "Budget " + str(id),
                     user_id = user.id, 
                     category_id = c.id, 
                     amount = round(random.uniform(100, 800), 2),

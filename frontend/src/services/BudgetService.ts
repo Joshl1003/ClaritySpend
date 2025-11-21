@@ -1,4 +1,7 @@
+import { api } from "./api";
+
 export interface Budget {
+  name: string;
   id: number;
   user_id: number;
   category_id: number;
@@ -7,17 +10,16 @@ export interface Budget {
 }
 
 export async function getBudgets(userId: number) {
-  const res = await fetch(`http://localhost:8000/budgets?user_id=${userId}`);
-  if (!res.ok) throw new Error("Failed to fetch budgets");
-  return res.json() as Promise<Budget[]>;
+  const res = await api.get<Budget[]>("/budgets", { params: { user_id: userId}})
+  return res.data;
 }
 
-export async function createBudget(budget: Omit<Budget, "id">) {
-  const res = await fetch("http://localhost:8000/budgets/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(budget),
-  });
-  if (!res.ok) throw new Error("Failed to create budget");
-  return res.json() as Promise<Budget>;
+export async function createBudget(payload: { name: string; user_id: number; category_id: number; amount: number; period?: string }) {
+  const res = await api.post<Budget>("/budgets", payload);
+  return res.data;
+}
+
+export async function deleteBudget(id: number) {
+  const res = await api.delete<Budget>(`/budgets/${id}`);
+  return res.data;
 }

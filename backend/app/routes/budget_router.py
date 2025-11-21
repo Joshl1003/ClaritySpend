@@ -10,6 +10,7 @@ router = APIRouter(prefix="/budgets", tags=["Budgets"])
 def create_budget_endpoint(payload: BudgetCreate, db: Session = Depends(get_db)):
     return create_budget(
         db,
+        name=payload.name,
         user_id=payload.user_id,
         category_id=payload.category_id,
         amount=payload.amount,

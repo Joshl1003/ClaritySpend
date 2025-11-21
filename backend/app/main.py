@@ -1,17 +1,21 @@
 from fastapi import FastAPI
-from app.routes import budget_router
-from backend.app.database.database import Base, engine
+from app.database.database import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 
-origins = [
-    "http://localhost:5173",  
-]
-
-Base.metadata.create_all(bind=engine)
+from app.routes.budget_router import router as budget_router
+from app.routes.transaction_router import router as transaction_router
+import app.models
 
 app = FastAPI()
 
-app.include_router(budget_router.router)
+origins = [
+    "http://localhost:5174",  
+    "http://127.0.0.1:5174",
+    "http://localhost:5173",  
+    "http://127.0.0.1:5173",
+
+
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,9 +25,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+Base.metadata.create_all(bind=engine)
+
+app.include_router(budget_router)
+app.include_router(transaction_router)
+
+
+
 @app.get("/")
 def root():
-    return {"message": "Welcome to ClaritySpend backend!"}
+    return {"message": "CORS Welcome to ClaritySpend backend!"}
 
 
 

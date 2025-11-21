@@ -8,10 +8,18 @@ export default function BudgetPage() {
   const [showForm, setShowForm] = useState(false);
 
   const fetchBudgets = async () => {
-    const res = await fetch("http://localhost:8000/budgets");
+  try {
+    const res = await fetch("http://localhost:8000/budgets/?user_id=1");
+    if (!res.ok) {
+      console.error("Failed to fetch budgets", res.status);
+      return;
+    }
     const data = await res.json();
     setBudgets(data);
-  };
+  } catch (err) {
+    console.error("Error fetching budgets:", err);
+  }
+};
 
   const mockData = [
     { category: "Food", amount: 250 },
@@ -29,7 +37,14 @@ export default function BudgetPage() {
         {showForm ? "Close" : "Add Budget"}
       </Button>
 
-      {showForm && <BudgetForm onAdd={fetchBudgets} />}
+      {showForm && (
+        <BudgetForm
+          onSuccess={async () => {
+            await fetchBudgets();
+            setShowForm(false);   // closes the form after successful create
+          }}
+        />
+      )}
 
       <div className="mt-4 grid gap-4">
         {budgets.map((b) => (

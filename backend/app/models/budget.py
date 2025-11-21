@@ -4,10 +4,11 @@ from app.database.database import Base
 class Budget(Base):
     __tablename__ = "budgets"
 
+    name = Column(String, nullable=False)
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
     amount = Column(Float, nullable=False)
     period = Column(String(20), default="monthly")  # monthly, weekly, etc.
-    start_date = Column(Date, nullable=True)
-    end_date = Column(Date, nullable=True)
+    # start_date = Column(Date, nullable=True)
+    # end_date = Column(Date, nullable=True)
