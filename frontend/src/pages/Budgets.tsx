@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import BudgetForm from "@/components/BudgetForm";
+import BudgetCard from "@/components/BudgetCard";
 import SpendingChart from "@/components/SpendingChart";
 
 export default function BudgetPage() {
@@ -48,10 +49,11 @@ export default function BudgetPage() {
 
       <div className="mt-4 grid gap-4">
         {budgets.map((b) => (
-          <div key={b.id} className="p-4 border rounded-lg">
-            <h2 className="font-bold">{b.name}</h2>
-            <p>${b.amount}</p>
-          </div>
+          <BudgetCard
+            key={b.id}
+            budget={b}
+            onDeleted={fetchBudgets}  // refresh after delete
+          />
         ))}
       </div>
 
