@@ -1,14 +1,24 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-interface BudgetFormProps {
+interface Budget {
+    id: number;
+    name: string;
+    amount: number;
+    period: string;
+    user_id: number;
+    category_id: number | null;
+}
+
+interface EditBudgetFormProps {
+    budget: Budget;
   onSuccess: () => void; // called after successful create
 }
 
-export default function BudgetForm({ onSuccess }: BudgetFormProps) {
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState<number | "">("");
-  const [period, setPeriod] = useState("");
+export default function EditBudgetForm({ budget, onSuccess }: EditBudgetFormProps) {
+  const [name, setName] = useState(budget.name);
+  const [amount, setAmount] = useState<number | "">(budget.amount);
+  const [period, setPeriod] = useState(budget.period);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,34 +31,26 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
       name,           
       amount,
       period,
-      user_id: 1,
-      category_id: 1,
-
+      category_id: budget.category_id,
     };
 
     try {
-      const res = await fetch("http://localhost:8000/budgets/", {
-        method: "POST",
+      const res = await fetch(`http://localhost:8000/budgets/${budget.id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
         const body = await res.text();
-        console.error("Create budget failed:", res.status, body);
-        setError("Failed to create budget");
+        console.error("Update budget failed:", res.status, body);
+        setError("Failed to update budget");
         return;
       }
 
-      // reset form
-      setName("");
-      setAmount("");
-      setPeriod("");
-
-      // tell parent so it can refetch + close
       onSuccess();
     } catch (err) {
-      console.error("Error creating budget:", err);
+      console.error("Error updating budget:", err);
       setError("Network error");
     } finally {
       setLoading(false);
@@ -56,7 +58,10 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-md">
+    <form 
+        onSubmit={handleSubmit} 
+        className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-md"
+    >
       <div className="flex gap-2">
         <input
           type="text"
@@ -83,7 +88,7 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
 
       <div className="flex gap-2 items-center">
         <Button type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Create Budget"}
+          {loading ? "Saving..." : "Save Changes"}
         </Button>
         {error && <span className="text-red-500 text-sm">{error}</span>}
       </div>

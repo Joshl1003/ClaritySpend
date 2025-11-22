@@ -21,6 +21,7 @@ Thumbs.db
 
 # Logs and other
 *.log
+agenda.txt
 
 # Node/React (frontend)
 frontend/node_modules/

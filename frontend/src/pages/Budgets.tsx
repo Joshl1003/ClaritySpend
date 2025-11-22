@@ -53,6 +53,7 @@ export default function BudgetPage() {
             key={b.id}
             budget={b}
             onDeleted={fetchBudgets}  // refresh after delete
+            onUpdated={fetchBudgets} // refresh after update
           />
         ))}
       </div>

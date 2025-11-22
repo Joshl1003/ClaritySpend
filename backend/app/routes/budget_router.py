@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.schemas.budget_schema import BudgetCreate, BudgetOut
-from app.crud.budget_crud import list_budgets, create_budget, delete_budget
+from app.schemas.budget_schema import BudgetCreate, BudgetOut, BudgetUpdate
+from app.crud.budget_crud import list_budgets, create_budget, delete_budget, update_budget
 from app.database.connection import get_db
 
 router = APIRouter(prefix="/budgets", tags=["Budgets"])
@@ -25,5 +25,7 @@ def list_budgets_endpoint(user_id: int, db: Session = Depends(get_db)):
 def delete_budget_endpoint(budget_id: int, db: Session = Depends(get_db)):
     return delete_budget(db, budget_id)
 
-
+@router.put("/{budget_id}", response_model=BudgetOut)
+def edit_budget_endpoint(budget_id: int, payload: BudgetUpdate, db: Session = Depends(get_db)):
+    return update_budget(db, budget_id=budget_id, update_data=payload)
 

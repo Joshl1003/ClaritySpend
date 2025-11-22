@@ -22,3 +22,13 @@ class BudgetOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class BudgetUpdate(BaseModel):
+    name: Optional[str]
+    amount: Optional[float]
+    period: Optional[str]
+    category_id: Optional[int]
+
+    class Config:
+        from_attributes = True
+
