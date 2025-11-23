@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.schemas.transaction_schema import TransactionCreate, TransactionOut
-from app.crud.transaction_crud import list_transactions, create_transaction, delete_transaction
+from app.schemas.transaction_schema import TransactionCreate, TransactionOut, TransactionUpdate
+from app.crud.transaction_crud import list_transactions, create_transaction, delete_transaction, update_transaction
 from app.database.connection import get_db
 
 
@@ -26,3 +26,7 @@ def list_txs(user_id: int = None, limit: int = 100, db: Session = Depends(get_db
 @router.delete("/{transaction_id}", response_model=TransactionOut)
 def delete_transaction_endpoint(transaction_id: int, db: Session = Depends(get_db)):
     return delete_transaction(db, transaction_id)
+
+@router.put("/{transaction_id}", response_model=TransactionOut)
+def edit_budget_endpoint(transaction_id: int, payload: TransactionUpdate, db: Session = Depends(get_db)):
+    return update_transaction(db, transaction_id=transaction_id, update_data=payload)

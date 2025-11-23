@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import BudgetForm from "@/components/BudgetForm";
-import BudgetCard from "@/components/BudgetCard";
+import BudgetForm from "@/components/Budget/BudgetForm";
+import BudgetCard from "@/components/Budget/BudgetCard";
 import SpendingChart from "@/components/SpendingChart";
 
 export default function BudgetPage() {

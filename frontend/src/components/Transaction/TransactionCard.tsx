@@ -1,26 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import EditBudgetForm from "@/components/EditBudgetForm";
+import EditTransactionForm from "@/components/Transaction/EditTransactionForm";
 
-interface Budget {
-  name: string
+interface Transaction {
+  description: string
   id: number;
   user_id: number;
   category_id: number;
   amount: number;
-  period: string;
+  date: string; //change
 }
 
 interface Props {
-  budget: Budget;
+  transaction: Transaction;
   onDeleted?: () => void
   onUpdated?: () => void
 }
 
-export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
+export default function TransactionCard({ transaction, onDeleted, onUpdated}: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
+  const formattedDate = transaction.date
+    ? new Date(transaction.date).toLocaleDateString()
+    : "No date";
 
   // DELETE function
   const handleDelete = async () => {
@@ -28,7 +31,7 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:8000/budgets/${budget.id}`, 
+      const res = await fetch(`http://localhost:8000/transactions/${transaction.id}`, 
         {
           method: "DELETE",
         }
@@ -36,8 +39,8 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
 
       if (!res.ok) {
         const body = await res.text();
-        console.error("Delete budget failed:", res.status, body);
-        setError("Failed to delete budget");
+        console.error("Delete transaction failed:", res.status, body);
+        setError("Failed to delete transaction");
         return;
       }
 
@@ -46,7 +49,7 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
       }
     } 
     catch (err) {
-      console.error("Error deleting budget:", err);
+      console.error("Error deleting transaction:", err);
       setError("Network error");
     } 
     finally {
@@ -58,9 +61,9 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
   return (
     <div className="border rounded p-4 shadow flex flex-col gap-2">
       <div>
-        <h3 className="font-semibold text-lg">{budget.name}</h3>
-        <p>Amount: ${budget.amount}</p>
-        <p>Period: {budget.period}</p>
+        <h3 className="font-semibold text-lg">{transaction.description}</h3>
+        <p>Amount: ${transaction.amount}</p>
+        <p>Date: {formattedDate}</p>
       </div>
 
       <div className="flex gap-2 items-center">
@@ -83,8 +86,8 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
         </Button>
 
         {editing && (
-          <EditBudgetForm
-            budget={budget}
+          <EditTransactionForm
+            transaction={transaction}
             onSuccess={() => {
               setEditing(false);
               onUpdated && onUpdated();
@@ -96,10 +99,3 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
     </div>
   );
 }
-
-    
-  
-
-
-
-
