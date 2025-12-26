@@ -12,3 +12,11 @@ class CategoryOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class CategoryUpdate(BaseModel):
+    name: str
+    user_id: Optional[int]
+    
+    class Config:
+        from_attributes = True
+

@@ -1,6 +1,7 @@
 from app.models.category import Category
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from app.schemas.category_schema import CategoryUpdate
 
 def list_categories(db, user_id: int = None):
     q = db.query(Category)
@@ -23,4 +24,16 @@ def delete_category(db: Session, category_id: int):
     db.commit()
     return c
 
-#def edit category
+def update_category(db: Session, category_id: int, updateData: CategoryUpdate):
+    c = db.query(Category).filter(Category.id == category_id).first()
+    if not c:
+        raise HTTPException(status_code=404, detail="category not found")
+    
+    data = updateData.model_dump(exclude_unset=True)
+
+    for field, value in data.items():
+        setattr(c, field, value)
+
+    db.commit()
+    db.refresh(c)
+    return c

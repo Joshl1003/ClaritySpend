@@ -62,7 +62,7 @@ export default function EditTransactionForm({ transaction, onSuccess }: EditTran
   return (
     <form 
         onSubmit={handleSubmit} 
-        className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-md"
+        className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-lg"
     >
       <div className="flex gap-2">
         <input

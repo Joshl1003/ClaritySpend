@@ -22,6 +22,7 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
 
+
   // DELETE function
   const handleDelete = async () => {
     setError(null);
