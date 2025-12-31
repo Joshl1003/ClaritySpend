@@ -19,5 +19,5 @@ def delete_category_endpoint(category_id: int, db: Session = Depends(get_db)):
     return delete_category(db, category_id)
 
 @router.put("/{category_id}", response_model=CategoryOut)
-def update_category_endpoint(category_id: int, payload: CategoryUpdate, db: Session = Depends(get_db)):
+def edit_category_endpoint(category_id: int, payload: CategoryUpdate, db: Session = Depends(get_db)):
     return update_category(db, category_id=category_id, update_data=payload)

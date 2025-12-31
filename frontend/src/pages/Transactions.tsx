@@ -42,10 +42,10 @@ export default function Transactions() {
       )}
 
       <div className="mt-4 grid gap-4">
-        {transactions.map((b) => (
+        {transactions.map((t) => (
           <TransactionCard
-            key={b.id}
-            transaction={b}
+            key={t.id}
+            transaction={t}
             onDeleted={fetchTransactions}  // refresh after delete
             onUpdated={fetchTransactions} // refresh after update
           />

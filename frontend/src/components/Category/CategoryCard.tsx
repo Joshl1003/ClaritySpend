@@ -1,23 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import EditBudgetForm from "@/components/Budget/EditBudgetForm";
+import EditCategoryForm from "@/components/Category/EditCategoryForm";
 
-interface Budget {
+interface Category {
   name: string
   id: number;
   user_id: number;
-  category_id: number;
-  amount: number;
-  period: string;
 }
 
 interface Props {
-  budget: Budget;
+  category: Category;
   onDeleted?: () => void
   onUpdated?: () => void
 }
 
-export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
+export default function CategoryCard({ category, onDeleted, onUpdated}: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
@@ -29,7 +26,7 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:8000/budgets/${budget.id}`, 
+      const res = await fetch(`http://localhost:8000/categories/${category.id}`, 
         {
           method: "DELETE",
         }
@@ -37,8 +34,8 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
 
       if (!res.ok) {
         const body = await res.text();
-        console.error("Delete budget failed:", res.status, body);
-        setError("Failed to delete budget");
+        console.error("Delete category failed:", res.status, body);
+        setError("Failed to delete category");
         return;
       }
 
@@ -47,7 +44,7 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
       }
     } 
     catch (err) {
-      console.error("Error deleting budget:", err);
+      console.error("Error deleting category:", err);
       setError("Network error");
     } 
     finally {
@@ -59,9 +56,7 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
   return (
     <div className="border rounded p-4 shadow flex flex-col gap-2">
       <div>
-        <h3 className="font-semibold text-lg">{budget.name}</h3>
-        <p>Amount: ${budget.amount}</p>
-        <p>Period: {budget.period}</p>
+        <h3 className="font-semibold text-lg">{category.name}</h3>
       </div>
 
       <div className="flex gap-2 items-center">
@@ -84,8 +79,8 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
         </Button>
 
         {editing && (
-          <EditBudgetForm
-            budget={budget}
+          <EditCategoryForm
+            category={category}
             onSuccess={() => {
               setEditing(false);
               onUpdated && onUpdated();

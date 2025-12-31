@@ -6,13 +6,17 @@ Built with a clean **FastAPI backend** and a **React + TypeScript frontend**, Cl
 
 ---
 
-## 🧠 Overview
+# Demo & Screenshots
 
-- 📊 Track and visualize transactions  
-- 💸 Create and manage personalized budgets  
-- 🏷️ Categorize expenses and incomes  
-- 🧾 Store data securely in a PostgreSQL database  
-- ⚡ Built for speed using FastAPI and Vite  
+---
+
+# Key Features
+- Create, edit, and delete transactions
+- Build category-based budgets
+- Visualize spending with interactive charts
+- Modular backend architecture (CRUD / schemas / routes)
+- Dockerized services with Kubernetes-ready setup
+- PostgreSQL-backed persistent storage
 
 ---
 
@@ -103,32 +107,6 @@ source venv/bin/activate   # On macOS/Linux
 pip install -r requirements.txt
 ```
 
-requirements.txt
-```sql
-annotated-types==0.7.0
-anyio==4.10.0
-click==8.2.1
-colorama==0.4.6
-fastapi==0.116.1
-greenlet==3.2.3
-h11==0.16.0
-httptools==0.6.4
-idna==3.10
-psycopg2-binary==2.9.10
-pydantic==2.11.7
-pydantic_core==2.33.2
-python-dotenv==1.1.1
-PyYAML==6.0.2
-sniffio==1.3.1
-SQLAlchemy==2.0.42
-starlette==0.47.2
-typing-inspection==0.4.1
-typing_extensions==4.14.1
-uvicorn==0.35.0
-watchfiles==1.1.0
-websockets==15.0.1
-```
-
 # Run the Server
 ```bash
 uvicorn app.main:app --reload
@@ -141,22 +119,6 @@ uvicorn app.main:app --reload
 ```bash
 cd frontend
 npm install
-```
-
-package.json
-```sql
-clsx@2.1.1
-lucide-react@0.545.0
-postcss@8.5.6
-react@19.2.0
-react-dom@19.2.0
-react-router-dom@7.9.3
-tailwindcss@4.1.14
-tailwindcss-animate@1.0.7
-tailwind-merge@3.3.1
-tw-animate-css@1.4.0
-typescript@5.8.3
-vite@7.1.9
 ```
 
 # Run the Frontend

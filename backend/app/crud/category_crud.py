@@ -24,12 +24,12 @@ def delete_category(db: Session, category_id: int):
     db.commit()
     return c
 
-def update_category(db: Session, category_id: int, updateData: CategoryUpdate):
+def update_category(db: Session, category_id: int, update_data: CategoryUpdate) -> Category:
     c = db.query(Category).filter(Category.id == category_id).first()
     if not c:
         raise HTTPException(status_code=404, detail="category not found")
     
-    data = updateData.model_dump(exclude_unset=True)
+    data = update_data.model_dump(exclude_unset=True)
 
     for field, value in data.items():
         setattr(c, field, value)
