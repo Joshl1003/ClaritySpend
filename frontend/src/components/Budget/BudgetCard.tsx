@@ -7,6 +7,7 @@ interface Budget {
   id: number;
   user_id: number;
   category_id: number;
+  category_name: string;
   amount: number;
   period: string;
 }
@@ -62,6 +63,7 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
         <h3 className="font-semibold text-lg">{budget.name}</h3>
         <p>Amount: ${budget.amount}</p>
         <p>Period: {budget.period}</p>
+        <p>Category: {budget.category_name}</p>
       </div>
 
       <div className="flex gap-2 items-center">

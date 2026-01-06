@@ -17,6 +17,7 @@ class BudgetOut(BaseModel):
     name: str
     user_id: int
     category_id: Optional[int]
+    category_name: Optional[str]
     amount: float
     period: str
 

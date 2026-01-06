@@ -1,12 +1,17 @@
 from app.models.budget import Budget
 from fastapi import HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.schemas.budget_schema import BudgetUpdate
 
 def list_budgets(db, user_id: int):
-    return db.query(Budget).filter(Budget.user_id == user_id).all()
+    return (
+        db.query(Budget)
+        .options(joinedload(Budget.category))
+        .filter(Budget.user_id == user_id)
+        .all()
+    )
 
-def create_budget(db, name: str, user_id: int, category_id: int, amount: float, period: str = "monthly"):
+def create_budget(db: Session, name: str, user_id: int, category_id: int | None, amount: float, period: str = "monthly"):
     b = Budget(name=name, user_id=user_id, category_id=category_id, amount=amount, period=period)
     db.add(b)
     db.commit()
