@@ -1,5 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+
+type Category = {
+  id: number;
+  name: string;
+  user_id: number | null;
+}
 
 interface BudgetFormProps {
   onSuccess: () => void; // called after successful create
@@ -9,20 +15,61 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState<number | "">("");
   const [period, setPeriod] = useState("");
+
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoryId, setCategoryId] = useState<number | "">("");
+
   const [loading, setLoading] = useState(false);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const userId = 1; //temp
+
+  // fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoadingCategories(true);
+      try {
+        // adjust endpoint/query to match your backend
+        const res = await fetch(`http://localhost:8000/categories/?user_id=${userId}`);
+        if (!res.ok) {
+          const body = await res.text();
+          console.error("Fetch categories failed:", res.status, body);
+          return;
+        }
+        const data: Category[] = await res.json();
+        setCategories(data);
+
+        // 2) optionally auto-select first category
+        if (data.length > 0) setCategoryId(data[0].id);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
+    if (categoryId === "") {
+      setError("Please select a category");
+      return;
+    }
+
+    setLoading(true);
+
     const payload = {
       name,           
       amount,
       period,
-      user_id: 1,
-      category_id: 1,
+      user_id: userId,
+      category_id: categoryId,
 
     };
 
@@ -79,6 +126,28 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
           onChange={(e) => setPeriod(e.target.value)}
           className="border p-2 w-32"
         />
+      </div>
+
+      {/* Category dropdown */}
+      <div className="flex gap-2 items-center">
+        <label className="text-sm w-20">Category</label>
+        <select
+          value={categoryId}
+          onChange={(e) => setCategoryId(Number(e.target.value))}
+          className="border p-2 flex-1"
+          disabled={loadingCategories}
+        >
+          {loadingCategories && <option>Loading categories...</option>}
+          {!loadingCategories && categories.length === 0 && (
+            <option value="">No categories found</option>
+          )}
+          {!loadingCategories &&
+            categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+        </select>
       </div>
 
       <div className="flex gap-2 items-center">
