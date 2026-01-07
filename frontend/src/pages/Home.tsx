@@ -6,7 +6,7 @@ interface Transaction {
   description: string;
   amount: number;
   date: string;   
-  // category_id?: number;
+  category_id: number;
 }
 
 export default function Home() {
