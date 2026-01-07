@@ -16,6 +16,7 @@ class TransactionOut(BaseModel):
     date: Optional[datetime]
     description: str
     category_id: Optional[int]
+    category_name: Optional[str]
 
     class Config:
         from_attributes = True

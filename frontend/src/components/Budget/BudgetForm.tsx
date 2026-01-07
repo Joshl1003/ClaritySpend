@@ -30,7 +30,6 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
     const fetchCategories = async () => {
       setLoadingCategories(true);
       try {
-        // adjust endpoint/query to match your backend
         const res = await fetch(`http://localhost:8000/categories/?user_id=${userId}`);
         if (!res.ok) {
           const body = await res.text();
@@ -40,7 +39,6 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
         const data: Category[] = await res.json();
         setCategories(data);
 
-        // 2) optionally auto-select first category
         if (data.length > 0) setCategoryId(data[0].id);
       } catch (err) {
         console.error("Error fetching categories:", err);

@@ -7,6 +7,7 @@ interface Transaction {
   id: number;
   user_id: number;
   category_id: number;
+  category_name: string
   amount: number;
   date: string; //change
 }
@@ -64,6 +65,7 @@ export default function TransactionCard({ transaction, onDeleted, onUpdated}: Pr
         <h3 className="font-semibold text-lg">{transaction.description}</h3>
         <p>Amount: ${transaction.amount}</p>
         <p>Date: {formattedDate}</p>
+        <p>Category: {transaction.category_name}</p>
       </div>
 
       <div className="flex gap-2 items-center">

@@ -14,4 +14,8 @@ class Transaction(Base):
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
 
     # user = relationship("User", backref="transactions")
-    # category = relationship("Category", backref="transactions")
+    category = relationship("Category", lazy="selectin")
+    
+    @property
+    def category_name(self):
+        return self.category.name if self.category else None
