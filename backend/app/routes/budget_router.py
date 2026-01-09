@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from app.schemas.budget_schema import BudgetCreate, BudgetOut, BudgetUpdate
 from app.crud.budget_crud import list_budgets, create_budget, delete_budget, update_budget
 from app.database.connection import get_db
+from app.core.deps import get_current_user
+from app.models.user import User
 
 router = APIRouter(prefix="/budgets", tags=["Budgets"])
 
@@ -18,8 +20,8 @@ def create_budget_endpoint(payload: BudgetCreate, db: Session = Depends(get_db))
     )
 
 @router.get("/", response_model=list[BudgetOut])
-def list_budgets_endpoint(user_id: int, db: Session = Depends(get_db)):
-    return list_budgets(db, user_id=user_id)
+def list_budgets_endpoint(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return list_budgets(db, user_id=current_user.id)
 
 @router.delete("/{budget_id}", response_model=BudgetOut)
 def delete_budget_endpoint(budget_id: int, db: Session = Depends(get_db)):

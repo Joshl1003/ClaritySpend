@@ -3,13 +3,14 @@ from sqlalchemy.orm import Session
 from app.schemas.transaction_schema import TransactionCreate, TransactionOut, TransactionUpdate
 from app.crud.transaction_crud import list_transactions, create_transaction, delete_transaction, update_transaction
 from app.database.connection import get_db
-
+from app.core.deps import get_current_user
+from app.models.user import User
 
 
 router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
 @router.post("/", response_model=TransactionOut)
-def create_tx(payload: TransactionCreate, db: Session = Depends(get_db)):
+def create_transaction_endpoint(payload: TransactionCreate, db: Session = Depends(get_db)):
     return create_transaction(
         db,
         description=payload.description,
@@ -20,8 +21,9 @@ def create_tx(payload: TransactionCreate, db: Session = Depends(get_db)):
     )
 
 @router.get("/", response_model=list[TransactionOut])
-def list_txs(user_id: int = None, limit: int = 100, db: Session = Depends(get_db)):
-    return list_transactions(db, user_id=user_id, limit=limit)
+def list_transactions_endpoint(current_user: User = Depends(get_current_user),  
+                               limit: int = 100, db: Session = Depends(get_db)):
+    return list_transactions(db, user_id=current_user.id, limit=limit)
 
 @router.delete("/{transaction_id}", response_model=TransactionOut)
 def delete_transaction_endpoint(transaction_id: int, db: Session = Depends(get_db)):

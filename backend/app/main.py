@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.budget_router import router as budget_router
 from app.routes.transaction_router import router as transaction_router
 from app.routes.category_router import router as category_router
+from app.routes.auth_router import router as auth_router
 import app.models
 
 app = FastAPI()
@@ -31,7 +32,7 @@ Base.metadata.create_all(bind=engine)
 app.include_router(budget_router)
 app.include_router(transaction_router)
 app.include_router(category_router)
-
+app.include_router(auth_router)
 
 
 @app.get("/")
