@@ -9,7 +9,7 @@ export default function CategoryPage() {
 
   const fetchCategories = async () => {
   try {
-    const res = await fetch("http://localhost:8000/categories/?user_id=1");
+    const res = await fetch("http://localhost:8000/categories/");
     if (!res.ok) {
       console.error("Failed to fetch categories", res.status);
       return;

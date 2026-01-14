@@ -21,7 +21,7 @@ export default function Home() {
 
     try {
       // TODO: will replace user_id=1 with real logged-in user
-      const res = await fetch("http://localhost:8000/transactions?user_id=1&limit=100");
+      const res = await fetch("http://localhost:8000/transactions?limit=100/");
       if (!res.ok) {
         const body = await res.text();
         console.error("Fetch transactions failed:", res.status, body);

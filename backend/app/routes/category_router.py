@@ -16,10 +16,10 @@ def create_category_endpoint(payload: CategoryCreate, db: Session = Depends(get_
 def list_categories_endpoint(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return list_categories(db, user_id=current_user.id)
 
-@router.delete("/{category_id}", response_model=CategoryOut)
+@router.delete("/{category_id}/", response_model=CategoryOut)
 def delete_category_endpoint(category_id: int, db: Session = Depends(get_db)):
     return delete_category(db, category_id)
 
-@router.put("/{category_id}", response_model=CategoryOut)
+@router.put("/{category_id}/", response_model=CategoryOut)
 def edit_category_endpoint(category_id: int, payload: CategoryUpdate, db: Session = Depends(get_db)):
     return update_category(db, category_id=category_id, update_data=payload)

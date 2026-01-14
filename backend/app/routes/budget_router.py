@@ -23,11 +23,11 @@ def create_budget_endpoint(payload: BudgetCreate, db: Session = Depends(get_db))
 def list_budgets_endpoint(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return list_budgets(db, user_id=current_user.id)
 
-@router.delete("/{budget_id}", response_model=BudgetOut)
+@router.delete("/{budget_id}/", response_model=BudgetOut)
 def delete_budget_endpoint(budget_id: int, db: Session = Depends(get_db)):
     return delete_budget(db, budget_id)
 
-@router.put("/{budget_id}", response_model=BudgetOut)
+@router.put("/{budget_id}/", response_model=BudgetOut)
 def edit_budget_endpoint(budget_id: int, payload: BudgetUpdate, db: Session = Depends(get_db)):
     return update_budget(db, budget_id=budget_id, update_data=payload)
 

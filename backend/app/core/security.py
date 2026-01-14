@@ -4,7 +4,7 @@ from jose import jwt
 from passlib.context import CryptContext
 import os
 
-pwd_context = CryptContext(schemas=["bcrypt"], depracated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 JWT_SECRET = os.getenv("JWT_SECRET", "dev-secret-change-me")
 JWT_ALG = os.getenv("JWT_ALG", "HS256")

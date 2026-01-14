@@ -10,7 +10,7 @@ export default function BudgetPage() {
 
   const fetchBudgets = async () => {
   try {
-    const res = await fetch("http://localhost:8000/budgets/?user_id=1");
+    const res = await fetch("http://localhost:8000/budgets/");
     if (!res.ok) {
       console.error("Failed to fetch budgets", res.status);
       return;

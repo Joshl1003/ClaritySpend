@@ -25,10 +25,10 @@ def list_transactions_endpoint(current_user: User = Depends(get_current_user),
                                limit: int = 100, db: Session = Depends(get_db)):
     return list_transactions(db, user_id=current_user.id, limit=limit)
 
-@router.delete("/{transaction_id}", response_model=TransactionOut)
+@router.delete("/{transaction_id}/", response_model=TransactionOut)
 def delete_transaction_endpoint(transaction_id: int, db: Session = Depends(get_db)):
     return delete_transaction(db, transaction_id)
 
-@router.put("/{transaction_id}", response_model=TransactionOut)
+@router.put("/{transaction_id}/", response_model=TransactionOut)
 def edit_budget_endpoint(transaction_id: int, payload: TransactionUpdate, db: Session = Depends(get_db)):
     return update_transaction(db, transaction_id=transaction_id, update_data=payload)

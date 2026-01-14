@@ -9,7 +9,7 @@ export default function Transactions() {
 
   const fetchTransactions = async () => {
   try {
-    const res = await fetch("http://localhost:8000/transactions/?user_id=1");
+    const res = await fetch("http://localhost:8000/transactions/");
     if (!res.ok) {
       console.error("Failed to fetch transactions", res.status);
       return;
