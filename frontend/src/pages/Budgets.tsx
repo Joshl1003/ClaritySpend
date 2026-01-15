@@ -4,21 +4,19 @@ import BudgetForm from "@/components/Budget/BudgetForm";
 import BudgetCard from "@/components/Budget/BudgetCard";
 import SpendingChart from "@/components/SpendingChart";
 
+import { getBudgets } from "@/services/BudgetService";
+
 export default function BudgetPage() {
   const [budgets, setBudgets] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
 
+  
   const fetchBudgets = async () => {
-  try {
-    const res = await fetch("http://localhost:8000/budgets/");
-    if (!res.ok) {
-      console.error("Failed to fetch budgets", res.status);
-      return;
-    }
-    const data = await res.json();
-    setBudgets(data);
-  } catch (err) {
-    console.error("Error fetching budgets:", err);
+    try {
+      const data = await getBudgets();
+      setBudgets(data);
+    } catch (e) {
+      console.error(e);
   }
 };
 
