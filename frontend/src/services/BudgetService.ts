@@ -5,6 +5,7 @@ export interface Budget {
   id: number;
   user_id: number;
   category_id: number;
+  category_name: string;
   amount: number;
   period: string;
 }

@@ -1,25 +1,37 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import TransactionForm from "@/components/Transaction/TransactionForm";
 import TransactionCard from "@/components/Transaction/TransactionCard";
 
+import { getTransactions, type Transaction } from "@/services/TransactionService";
+import { useAuth } from "@/auth/useAuth";
+
 export default function Transactions() {
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [showForm, setShowForm] = useState(false);
+
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const fetchTransactions = async () => {
   try {
-    const res = await fetch("http://localhost:8000/transactions/");
-    if (!res.ok) {
-      console.error("Failed to fetch transactions", res.status);
-      return;
+      const data = await getTransactions();
+      setTransactions(data);
+  } catch (e: any) {
+      // If token is missing/expired, backend returns 401
+      const status = e?.response?.status;
+
+      if (status === 401) {
+        await logout();
+        navigate("/login", { replace: true });
+        return;
+      }
+
+      console.error("Error fetching transactions:", e);
     }
-    const data = await res.json();
-    setTransactions(data);
-  } catch (err) {
-    console.error("Error fetching transactions:", err);
-  }
-};
+  };
 
 
   useEffect(() => {

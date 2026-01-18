@@ -1,20 +1,21 @@
 import { api } from "./api";
 
 export interface Transaction {
-  name: string;
+  description: string;
   id: number;
   user_id: number;
   category_id: number;
+  category_name: string;
   amount: number;
-  period: string;
+  date: string;
 }
 
-export async function getTransaction() {
+export async function getTransactions() {
   const res = await api.get<Transaction[]>("/transactions/")
   return res.data;
 }
 
-export async function createTransaction(payload: { name: string; category_id: number; amount: number; period?: string }) {
+export async function createTransaction(payload: { description: string; category_id: number; amount: number; date?: string }) {
   const res = await api.post<Transaction>("/transactions/", payload);
   return res.data;
 }
