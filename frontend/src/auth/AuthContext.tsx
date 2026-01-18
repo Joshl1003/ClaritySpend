@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { AuthUser, LoginRequest, RegisterRequest } from "@/types/auth";
 import * as AuthService from "@/services/AuthService";
 
@@ -16,6 +17,8 @@ export const AuthContext = createContext<AuthContextValue | undefined>(undefined
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
 
   // Bootstraps auth on page refresh
   useEffect(() => {
@@ -44,9 +47,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (data: RegisterRequest) => {
     await AuthService.register(data);
-   
-    // TODO redirect user to login page (simplest)
-    
+    navigate("/login");
+
   };
 
   const logout = async () => {
