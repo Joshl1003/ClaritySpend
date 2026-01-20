@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const { register } = useAuth();
 
+   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -24,13 +25,13 @@ export default function RegisterPage() {
     setSubmitting(true);
 
     try {
-      await register({ email, password });
-      navigate("/", { replace: true });
+      await register({ username, email, password });
+      navigate("/login", { replace: true });
     } catch (err: any) {
       const detail =
         err?.response?.data?.detail ||
         err?.message ||
-        "Register failed. Please check your credentials.";
+        "Registration failed. Please try again";
       setError(String(detail));
     } finally {
       setSubmitting(false);
@@ -41,12 +42,24 @@ export default function RegisterPage() {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Sign up</CardTitle>
-          <CardDescription>Access your ClaritySpend account.</CardDescription>
+          <CardTitle>Create account</CardTitle>
+          <CardDescription>Start tracking your spending with ClaritySpend.</CardDescription>
         </CardHeader>
 
         <CardContent>
           <form onSubmit={onSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                autoComplete="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Johndoe123"
+                required
+              />
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -54,8 +67,7 @@ export default function RegisterPage() {
                 type="email"
                 autoComplete="email"
                 value={email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
               />
@@ -68,9 +80,8 @@ export default function RegisterPage() {
                 type="password"
                 autoComplete="current-password"
                 value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPassword(e.target.value)}
-                placeholder="••••••••"
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Create a strong password"
                 required
               />
             </div>
@@ -78,7 +89,7 @@ export default function RegisterPage() {
             {error && <p className="text-sm text-red-500">{error}</p>}
 
             <Button type="submit" className="w-full" disabled={submitting}>
-              {submitting ? "Registering..." : "Sign up"}
+              {submitting ? "Creating..." : "Sign up"}
             </Button>
 
             <p className="text-sm text-muted-foreground">
