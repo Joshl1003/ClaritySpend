@@ -1,4 +1,5 @@
-
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -6,7 +7,17 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 
+import { useAuth } from "@/auth/useAuth";
+
 export default function Navbar() {
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login", { replace: true });
+  };
+  
   return (
     <NavigationMenu>
       <NavigationMenuList>
