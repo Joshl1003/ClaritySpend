@@ -24,22 +24,22 @@ export interface LoginRequest {
 }
 
 export async function register(payload: RegisterRequest): Promise<AuthUser> {
-  const res = await api.post<AuthUser>("/auth/register", payload);
+  const res = await api.post<AuthUser>("/auth/register/", payload);
   return res.data;
 }
 
 export async function login(payload: LoginRequest): Promise<LoginResponse> {
-  const res = await api.post<LoginResponse>("/auth/login", payload);
+  const res = await api.post<LoginResponse>("/auth/login/", payload);
   return res.data;
 }
 
 export async function me(): Promise<AuthUser> {
-  const res = await api.get<AuthUser>("/auth/me");
+  const res = await api.get<AuthUser>("/auth/me/");
   return res.data;
 }
 
 // will implement later
 export async function logout(): Promise<void> {
-  await api.post("/auth/logout").catch(() => {
+  await api.post("/auth/logout/").catch(() => {
   });
 }

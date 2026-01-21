@@ -32,9 +32,9 @@ def run():
         names = ["Food", "Transportation", "Entertainment", "Bills", "Shopping", "Health"]
         cats: list[Category] = []
         for n in names:
-            category = db.query(Category).filter(Category.name == n, Category.user_id == user.id).first()
+            category = db.query(Category).filter(Category.name == n, Category.user_id == None).first()
             if not category:
-                category = Category(name=n, user_id=user.id)
+                category = Category(name=n, user_id=None)
                 db.add(category)
                 db.commit()
                 db.refresh(category)
