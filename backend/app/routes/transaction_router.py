@@ -10,12 +10,12 @@ from app.models.user import User
 router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
 @router.post("/", response_model=TransactionOut)
-def create_transaction_endpoint(payload: TransactionCreate, db: Session = Depends(get_db)):
+def create_transaction_endpoint(payload: TransactionCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return create_transaction(
         db,
         description=payload.description,
         amount=payload.amount,
-        user_id=payload.user_id,
+        user_id=current_user.id,
         category_id=payload.category_id,
         date=payload.date
     )

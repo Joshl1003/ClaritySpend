@@ -1,22 +1,18 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-type Category = {
-  id: number;
-  name: string;
-  user_id: number | null;
-};
+import { getCategories, type Category } from "@/services/CategoryService";
+import { createTransaction } from "@/services/TransactionService";
 
 interface TransactionFormProps {
-  onSuccess: () => void; // called after successful create
+  onSuccess: () => void;
 }
 
-export default function Transaction({ onSuccess }: TransactionFormProps) {
+export default function TransactionForm({ onSuccess }: TransactionFormProps) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState<number | "">("");
   const [date, setDate] = useState("");
 
-  
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryId, setCategoryId] = useState<number | "">("");
 
@@ -24,105 +20,99 @@ export default function Transaction({ onSuccess }: TransactionFormProps) {
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const userId = 1; //temp
-
   useEffect(() => {
-    const fetchCategories = async () => {
+    const load = async () => {
       setLoadingCategories(true);
       try {
-        const res = await fetch(`http://localhost:8000/categories/?user_id=${userId}`);
-        if (!res.ok) {
-          const body = await res.text();
-          console.error("Fetch categories failed:", res.status, body);
-          return;
-        }
-        const data: Category[] = await res.json();
+        const data = await getCategories(); // ✅ backend returns defaults + user categories
         setCategories(data);
 
+        // pick a default selection
         if (data.length > 0) setCategoryId(data[0].id);
       } catch (err) {
         console.error("Error fetching categories:", err);
+        setError("Failed to load categories");
       } finally {
         setLoadingCategories(false);
       }
     };
 
-    fetchCategories();
+    load();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
 
     if (categoryId === "") {
       setError("Please select a category");
       return;
     }
 
+    if (amount === "" || Number.isNaN(Number(amount))) {
+      setError("Please enter a valid amount");
+      return;
+    }
+
     setLoading(true);
 
     const payload = {
-      description,           
-      amount,
+      description,
+      amount: Number(amount),
       date,
-      user_id: userId,
       category_id: categoryId,
-
+      // ✅ no user_id anymore — token determines user
     };
 
     try {
-      const res = await fetch("http://localhost:8000/transactions/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const body = await res.text();
-        console.error("Create transaction failed:", res.status, body);
-        setError("Failed to create transaction");
-        return;
-      }
-
-      // reset form
+      await createTransaction(payload);
       setDescription("");
       setAmount("");
       setDate("");
-
-      // tell parent so it can refetch + close
       onSuccess();
-    } catch (err) {
-      console.error("Error creating transaction:", err);
-      setError("Network error");
+    } catch (err: any) {
+      const detail =
+        err?.response?.data?.detail ||
+        err?.message ||
+        "Failed to create transaction";
+      console.error("Create transaction failed:", err);
+      setError(String(detail));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-lg">
+    <form
+      onSubmit={handleSubmit}
+      className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-lg"
+    >
       <div className="flex gap-2">
         <input
           type="text"
           placeholder="Transaction Name"
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setDescription(e.target.value)
+          }
           className="border p-2 flex-1"
         />
         <input
           type="number"
           placeholder="Amount"
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setAmount(e.target.value === "" ? "" : Number(e.target.value))
+          }
           className="border p-2 w-32"
         />
         <input
           type="date"
-          placeholder="Date"
           value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="border p-2 w-32"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setDate(e.target.value)
+          }
+          className="border p-2 w-40"
         />
       </div>
 
@@ -131,7 +121,9 @@ export default function Transaction({ onSuccess }: TransactionFormProps) {
         <label className="text-sm w-20">Category</label>
         <select
           value={categoryId}
-          onChange={(e) => setCategoryId(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setCategoryId(Number(e.target.value))
+          }
           className="border p-2 flex-1"
           disabled={loadingCategories}
         >
@@ -149,7 +141,7 @@ export default function Transaction({ onSuccess }: TransactionFormProps) {
       </div>
 
       <div className="flex gap-2 items-center">
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading || loadingCategories}>
           {loading ? "Creating..." : "Create Transaction"}
         </Button>
         {error && <span className="text-red-500 text-sm">{error}</span>}
