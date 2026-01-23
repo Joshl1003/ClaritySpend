@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import EditBudgetForm from "@/components/Budget/EditBudgetForm";
 
+import { deleteBudget } from "@/services/BudgetService";
+
 interface Budget {
   name: string
   id: number;
@@ -30,31 +32,19 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:8000/budgets/${budget.id}`, 
-        {
-          method: "DELETE",
+          await deleteBudget(budget.id); 
+          onDeleted?.();
+        } catch (err: any) {
+          const detail =
+            err?.response?.data?.detail ||
+            err?.message ||
+            "Failed to delete budget";
+          console.error("Error deleting budget:", err);
+          setError(String(detail));
+        } finally {
+          setLoading(false);
         }
-      );
-
-      if (!res.ok) {
-        const body = await res.text();
-        console.error("Delete budget failed:", res.status, body);
-        setError("Failed to delete budget");
-        return;
-      }
-
-      if (onDeleted) {
-        onDeleted();
-      }
-    } 
-    catch (err) {
-      console.error("Error deleting budget:", err);
-      setError("Network error");
-    } 
-    finally {
-      setLoading(false);
-    }
-  };
+      };
 
   
   return (
@@ -89,13 +79,12 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
           <EditBudgetForm
             budget={budget}
             onSuccess={() => {
-              setEditing(false);
-              onUpdated && onUpdated();
-            }}
-          />
-        )}
-        {error && <span className="text-red-500 text-sm">{error}</span>}
-      </div>
+                setEditing(false);
+                onUpdated?.();
+              }}
+            />
+          )}
+       </div>
     </div>
   );
 }

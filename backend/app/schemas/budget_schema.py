@@ -4,7 +4,6 @@ from datetime import date
 
 class BudgetCreate(BaseModel):
     name: str
-    user_id: int
     category_id: Optional[int]
     amount: float
     period: Optional[str] = "monthly"

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
+import { updateTransaction } from "@/services/TransactionService";
+
 interface Transaction {
     id: number;
     description: string;
     amount: number;
-    date: string;
+    date: string | null;
     user_id: number;
     category_id: number | null;
 }
@@ -31,29 +33,21 @@ export default function EditTransactionForm({ transaction, onSuccess }: EditTran
 
     const payload = {
       description,           
-      amount,
-      date,
+      amount: Number(amount),
+      date: date ? date : null,
       category_id: transaction.category_id,
     };
 
     try {
-      const res = await fetch(`http://localhost:8000/transactions/${transaction.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const body = await res.text();
-        console.error("Update transaction failed:", res.status, body);
-        setError("Failed to update transaction");
-        return;
-      }
-
+      await updateTransaction(transaction.id, payload); 
       onSuccess();
-    } catch (err) {
+    } catch (err: any) {
+      const detail =
+        err?.response?.data?.detail ||
+        err?.message ||
+        "Failed to update transaction";
       console.error("Error updating transaction:", err);
-      setError("Network error");
+      setError(String(detail));
     } finally {
       setLoading(false);
     }
@@ -69,21 +63,27 @@ export default function EditTransactionForm({ transaction, onSuccess }: EditTran
           type="text"
           placeholder="Description"
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setDescription(e.target.value)
+          }
           className="border p-2 flex-1"
         />
         <input
           type="number"
           placeholder="Amount"
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setAmount(e.target.value === "" ? "" : Number(e.target.value))
+          }
           className="border p-2 w-32"
         />
         <input
           type="date"
           placeholder="Date"
           value={date}
-          onChange={(e) => setDate(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setDate(e.target.value)
+          }
           className="border p-2 w-32"
         />
       </div>

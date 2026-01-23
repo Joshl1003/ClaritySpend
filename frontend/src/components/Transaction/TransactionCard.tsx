@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import EditTransactionForm from "@/components/Transaction/EditTransactionForm";
 
+import { deleteTransaction } from "@/services/TransactionService";
+
 interface Transaction {
   description: string
   id: number;
@@ -9,7 +11,7 @@ interface Transaction {
   category_id: number;
   category_name: string
   amount: number;
-  date: string; //change
+  date: string | null; //change
 }
 
 interface Props {
@@ -32,28 +34,16 @@ export default function TransactionCard({ transaction, onDeleted, onUpdated}: Pr
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:8000/transactions/${transaction.id}`, 
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!res.ok) {
-        const body = await res.text();
-        console.error("Delete transaction failed:", res.status, body);
-        setError("Failed to delete transaction");
-        return;
-      }
-
-      if (onDeleted) {
-        onDeleted();
-      }
-    } 
-    catch (err) {
+      await deleteTransaction(transaction.id); 
+      onDeleted?.();
+    } catch (err: any) {
+      const detail =
+        err?.response?.data?.detail ||
+        err?.message ||
+        "Failed to delete transaction";
       console.error("Error deleting transaction:", err);
-      setError("Network error");
-    } 
-    finally {
+      setError(String(detail));
+    } finally {
       setLoading(false);
     }
   };
@@ -92,11 +82,10 @@ export default function TransactionCard({ transaction, onDeleted, onUpdated}: Pr
             transaction={transaction}
             onSuccess={() => {
               setEditing(false);
-              onUpdated && onUpdated();
+              onUpdated?.();
             }}
           />
         )}
-        {error && <span className="text-red-500 text-sm">{error}</span>}
       </div>
     </div>
   );

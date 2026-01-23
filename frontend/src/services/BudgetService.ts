@@ -25,7 +25,15 @@ export async function deleteBudget(id: number) {
   return res.data;
 }
 
-export async function updateBudget(payload: { name: string; category_id: number; amount: number; period?: string }) {
-  const res = await api.put<Budget>("/budgets/", payload);
+export async function updateBudget(
+  id: number,
+  payload: {
+    name?: string;
+    amount?: number;
+    period?: string | null;
+    category_id?: number | null;
+  }
+) {
+  const res = await api.put(`/budgets/${id}`, payload);
   return res.data;
 }

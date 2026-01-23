@@ -24,7 +24,7 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
     const load = async () => {
       setLoadingCategories(true);
       try {
-        const data = await getCategories(); // ✅ backend returns defaults + user categories
+        const data = await getCategories();
         setCategories(data);
 
         // pick a default selection
@@ -61,7 +61,6 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
       amount: Number(amount),
       date,
       category_id: categoryId,
-      // ✅ no user_id anymore — token determines user
     };
 
     try {

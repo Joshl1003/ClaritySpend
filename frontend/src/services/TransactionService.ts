@@ -24,3 +24,16 @@ export async function deleteTransaction(id: number) {
   const res = await api.delete<Transaction>(`/transactions/${id}/`);
   return res.data;
 }
+
+export async function updateTransaction(
+  id: number,
+  payload: {
+    description?: string;
+    amount?: number;
+    date?: string | null;
+    category_id?: number | null;
+  }
+) {
+  const res = await api.put(`/transactions/${id}`, payload);
+  return res.data;
+}

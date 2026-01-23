@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
+import { updateBudget } from "@/services/BudgetService";
+
 interface Budget {
     id: number;
     name: string;
     amount: number;
-    period: string;
+    period: string | null;
     user_id: number;
     category_id: number | null;
 }
@@ -18,7 +20,7 @@ interface EditBudgetFormProps {
 export default function EditBudgetForm({ budget, onSuccess }: EditBudgetFormProps) {
   const [name, setName] = useState(budget.name);
   const [amount, setAmount] = useState<number | "">(budget.amount);
-  const [period, setPeriod] = useState(budget.period);
+  const [period, setPeriod] = useState<string>(budget.period ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,33 +31,25 @@ export default function EditBudgetForm({ budget, onSuccess }: EditBudgetFormProp
 
     const payload = {
       name,           
-      amount,
+      amount: Number(amount),
       period,
       category_id: budget.category_id,
     };
 
     try {
-      const res = await fetch(`http://localhost:8000/budgets/${budget.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const body = await res.text();
-        console.error("Update budget failed:", res.status, body);
-        setError("Failed to update budget");
-        return;
-      }
-
-      onSuccess();
-    } catch (err) {
-      console.error("Error updating budget:", err);
-      setError("Network error");
-    } finally {
-      setLoading(false);
-    }
-  };
+          await updateBudget(budget.id, payload); 
+          onSuccess();
+        } catch (err: any) {
+          const detail =
+            err?.response?.data?.detail ||
+            err?.message ||
+            "Failed to update budget";
+          console.error("Error updating budget:", err);
+          setError(String(detail));
+        } finally {
+          setLoading(false);
+        }
+      };
 
   return (
     <form 
@@ -67,21 +61,27 @@ export default function EditBudgetForm({ budget, onSuccess }: EditBudgetFormProp
           type="text"
           placeholder="Budget Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setName(e.target.value)
+          }
           className="border p-2 flex-1"
         />
         <input
           type="number"
           placeholder="Amount"
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setAmount(e.target.value === "" ? "" : Number(e.target.value))
+          }
           className="border p-2 w-32"
         />
         <input
           type="text"
           placeholder="Period"
           value={period}
-          onChange={(e) => setPeriod(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPeriod(e.target.value)
+          }
           className="border p-2 w-32"
         />
       </div>

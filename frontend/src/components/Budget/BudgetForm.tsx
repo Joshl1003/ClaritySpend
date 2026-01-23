@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-type Category = {
-  id: number;
-  name: string;
-  user_id: number | null;
-}
+import { getCategories, type Category } from "@/services/CategoryService";
+import { createBudget } from "@/services/BudgetService";
 
 interface BudgetFormProps {
   onSuccess: () => void; // called after successful create
@@ -23,40 +20,38 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const userId = 1; //temp
-
   // fetch categories
   useEffect(() => {
-    const fetchCategories = async () => {
+    const load = async () => {
       setLoadingCategories(true);
       try {
-        const res = await fetch(`http://localhost:8000/categories/?user_id=${userId}`);
-        if (!res.ok) {
-          const body = await res.text();
-          console.error("Fetch categories failed:", res.status, body);
-          return;
-        }
-        const data: Category[] = await res.json();
+        const data = await getCategories();
         setCategories(data);
 
+        // pick a default selection
         if (data.length > 0) setCategoryId(data[0].id);
       } catch (err) {
         console.error("Error fetching categories:", err);
+        setError("Failed to load categories");
       } finally {
         setLoadingCategories(false);
       }
     };
 
-    fetchCategories();
+    load();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
 
     if (categoryId === "") {
       setError("Please select a category");
+      return;
+    }
+
+    if (amount === "" || Number.isNaN(Number(amount))) {
+      setError("Please enter a valid amount");
       return;
     }
 
@@ -64,41 +59,29 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
 
     const payload = {
       name,           
-      amount,
+      amount: Number(amount),
       period,
-      user_id: userId,
       category_id: categoryId,
 
     };
 
     try {
-      const res = await fetch("http://localhost:8000/budgets/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const body = await res.text();
-        console.error("Create budget failed:", res.status, body);
-        setError("Failed to create budget");
-        return;
-      }
-
-      // reset form
-      setName("");
-      setAmount("");
-      setPeriod("");
-
-      // tell parent so it can refetch + close
-      onSuccess();
-    } catch (err) {
-      console.error("Error creating budget:", err);
-      setError("Network error");
-    } finally {
-      setLoading(false);
-    }
-  };
+          await createBudget(payload);
+          setName("");
+          setAmount("");
+          setPeriod("");
+          onSuccess();
+        } catch (err: any) {
+          const detail =
+            err?.response?.data?.detail ||
+            err?.message ||
+            "Failed to create budget";
+          console.error("Create budget failed:", err);
+          setError(String(detail));
+        } finally {
+          setLoading(false);
+        }
+      };
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-lg">
@@ -107,21 +90,27 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
           type="text"
           placeholder="Budget Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setName(e.target.value)
+          }
           className="border p-2 flex-1"
         />
         <input
           type="number"
           placeholder="Amount"
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setAmount(e.target.value === "" ? "" : Number(e.target.value))
+          }
           className="border p-2 w-32"
         />
         <input
           type="text"
           placeholder="Period"
           value={period}
-          onChange={(e) => setPeriod(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPeriod(e.target.value)
+          }
           className="border p-2 w-32"
         />
       </div>
@@ -131,7 +120,9 @@ export default function BudgetForm({ onSuccess }: BudgetFormProps) {
         <label className="text-sm w-20">Category</label>
         <select
           value={categoryId}
-          onChange={(e) => setCategoryId(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setCategoryId(Number(e.target.value))
+          }
           className="border p-2 flex-1"
           disabled={loadingCategories}
         >
