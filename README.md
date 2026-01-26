@@ -43,13 +43,16 @@ Built with a clean **FastAPI backend** and a **React + TypeScript frontend**, Cl
 ---
 
 ## 📁 Folder Structure
-
+```bash
 ClaritySpend/
 │
 ├── backend/
 │ └── app/
 │ ├── main.py
-│ ├── config.py
+│ ├── seed.py
+│ ├── core/
+│ │ ├── deps.py
+│ │ └── security.py
 │ ├── database/
 │ │ ├── connection.py
 │ │ └── database.py
@@ -60,6 +63,10 @@ ClaritySpend/
 │
 └── frontend/
 ├── src/
+│ ├── auth/
+│ │ ├── AuthContext.tsx
+│ │ ├── ProtectedRoute.tsx
+│ │ └── useAuth.tsx
 │ ├── components/
 │ │ ├── Navbar.tsx
 │ │ └── ui/ (ShadCN components)
@@ -68,11 +75,15 @@ ClaritySpend/
 │ │ ├── Transactions.tsx
 │ │ ├── Budgets.tsx
 │ │ └── Categories.tsx
-│ ├── App.tsx
+│ ├── services/
+│ │ └── api.tsx
+│ ├── types/
+│ │ └── auth.ts
+│ ├── app.tsx
 │ └── main.tsx
 ├── index.html
 └── tailwind.config.js
-
+```
 
 ---
 
@@ -134,56 +145,58 @@ npm run dev
 # Create a .env file inside backend/app/:
 ```bash
 DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/ClaritySpend
-```
-
-# authentication (yet to implement):
-```bash
 SECRET_KEY=your_secret_here
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
 ---
 
-### 🧩 API Endpoints
-Method	Endpoint	Description
-GET	/	Root endpoint - health check
-GET	/budgets/	Get all budgets for a user
-POST	/budgets/	Create a new budget
-GET	/transactions/	Get all transactions
-POST	/transactions/	Add a transaction
-...	(More coming soon)	
+## 🧩 API Overview
+
+| Method | Endpoint        | Description                    |
+|--------|-----------------|--------------------------------|
+| POST   | /auth/register  | Register new user              |
+| POST   | /auth/login     | Login user                     |
+| GET    | /auth/me        | Get current authenticated user |
+| GET    | /transactions   | Fetch user transactions        |
+| POST   | /transactions   | Create transaction             |
+| GET    | /budgets        | Fetch budgets                  |
+| POST   | /budgets        | Create budget                  |
+| GET    | /categories     | Fetch categories               |
 
 ---
 
 ### 🧱 Database Models
 
-User – represents a registered user
+User – authenticated account
 
-Category – represents expense categories
+Category – global or user-specific spending category
 
-Budget – represents a spending plan per category
+Budget – spending limit per category
 
-Transaction – represents income/expense entries
+Transaction – individual income/expense entry
 
 ---
 
 ### 💻 Development Notes
 
-Each router (e.g., budget_router.py, transaction_router.py) handles CRUD logic for its model.
+- All protected endpoints rely on JWT authentication
 
-get_db() is used as a FastAPI dependency to manage DB sessions.
+- Frontend API calls use a centralized Axios client with interceptors
 
-Schemas (Pydantic models) handle request validation and response shaping.
+- Schemas (Pydantic models) handle request validation and response shaping.
 
-ShadCN UI provides ready-made, styled React components.
+- ShadCN UI provides ready-made, styled React components.
 
-🧪 Future Enhancements
+---
 
-✅ Add authentication (JWT or OAuth)
+### 🧪 Future Enhancements
+
+✅ Budget alerts & warnings
 
 📊 Add visual analytics dashboard
 
-💾 Export transactions as CSV
+💾 CSV export for transactions
 
 🌙 Implement light/dark theme toggle
 

@@ -10,8 +10,8 @@ export interface Transaction {
   date: string;
 }
 
-export async function getTransactions() {
-  const res = await api.get<Transaction[]>("/transactions/")
+export async function getTransactions(params?: { limit?: number }) {
+  const res = await api.get<Transaction[]>("/transactions/", { params });
   return res.data;
 }
 
