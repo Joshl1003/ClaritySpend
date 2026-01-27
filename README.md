@@ -7,22 +7,47 @@ Built with a clean **FastAPI backend** and a **React + TypeScript frontend**, Cl
 ---
 
 # Demo & Screenshots
-
+(Coming soon — dashboard, budgets, and transaction views)
 ---
 
 # Key Features
+## 🔐 Authentication & Users
+- Secure user registration and login
+- JWT-based authentication
+- Protected routes and session persistence across refresh
+
+## 💸 Transactions
 - Create, edit, and delete transactions
-- Build category-based budgets
-- Visualize spending with interactive charts
-- Modular backend architecture (CRUD / schemas / routes)
-- Dockerized services with Kubernetes-ready setup
+- Categorize transactions for budgeting and analytics
+- Date-based filtering and sorting support
+
+## 📊 Budgets
+- Category-based budgets
+- Real-time budget usage calculations
+- Visual indicators for remaining vs. exceeded budgets
+
+## 🏷 Categories
+- Global default categories available to all users
+- User-defined custom categories
+- Category reuse across transactions and budgets
+
+## 📈 Dashboard & Insights
+- Monthly spending overview
+- Recent transactions summary
+- Derived financial metrics (totals, averages, budget usage)
+- Foundation for category-based charts and analytics
+
+## 🧱 Architecture & Tooling
+- Modular backend (models / schemas / CRUD / routes)
+- Type-safe frontend services layer (Axios + interceptors)
+- Dockerized backend, Kubernetes-ready
 - PostgreSQL-backed persistent storage
 
 ---
 
-## ⚙️ Tech Stack
+# ⚙️ Tech Stack
 
-### **Frontend**
+## **Frontend**
 - React 19.2.0 (Vite + TypeScript)
 - TailwindCSS 4.1.14
 - ShadCN UI + Lucide React Icons
@@ -32,7 +57,7 @@ Built with a clean **FastAPI backend** and a **React + TypeScript frontend**, Cl
 - chart.js react-chartjs-2
 
 
-### **Backend**
+## **Backend**
 - FastAPI 0.116.1
 - SQLAlchemy 2.0.42
 - PostgreSQL (via psycopg2-binary)
@@ -42,7 +67,7 @@ Built with a clean **FastAPI backend** and a **React + TypeScript frontend**, Cl
 
 ---
 
-## 📁 Folder Structure
+# 📁 Folder Structure
 ```bash
 ClaritySpend/
 │
@@ -87,9 +112,9 @@ ClaritySpend/
 
 ---
 
-## 🔧 Installation & Setup
+# 🔧 Installation & Setup
 
-### 1. Clone the Repository
+## 1. Clone the Repository
 ```bash
 git clone https://github.com/yourusername/ClaritySpend.git
 cd ClaritySpend
@@ -98,27 +123,27 @@ cd ClaritySpend
 ---
 
 
-### 2. Backend Setup
-# Create Virtual Environment
+## 2. Backend Setup
+### Create Virtual Environment
 ```bash
 cd backend
 python -m venv venv
 ```
-# Activate it
+### Activate it
 ```bash
 venv\Scripts\activate      # On Windows
 ```
-# or
+### or
 ```bash
 source venv/bin/activate   # On macOS/Linux
 ```
 
-# Install Dependencies
+### Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-# Run the Server
+### Run the Server
 ```bash
 uvicorn app.main:app --reload
 ```
@@ -126,23 +151,23 @@ uvicorn app.main:app --reload
 ---
 
 
-### 3. Frontend Setup
+## 3. Frontend Setup
 ```bash
 cd frontend
 npm install
 ```
 
-# Run the Frontend
+### Run the Frontend
 ```bash
 npm run dev
 ```
-# Then open the URL shown in your terminal (usually http://localhost:5173).
+### Then open the URL shown in your terminal (usually http://localhost:5173).
 
 ---
 
-### ⚙️ Environment Variables
+## ⚙️ Environment Variables
 
-# Create a .env file inside backend/app/:
+### Create a .env file inside backend/app/:
 ```bash
 DATABASE_URL=postgresql://postgres:yourpassword@localhost:5432/ClaritySpend
 SECRET_KEY=your_secret_here
@@ -151,7 +176,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 ---
 
-## 🧩 API Overview
+# 🧩 API Overview
 
 | Method | Endpoint        | Description                    |
 |--------|-----------------|--------------------------------|
@@ -166,7 +191,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 ---
 
-### 🧱 Database Models
+# 🧱 Database Models
 
 User – authenticated account
 
@@ -178,7 +203,7 @@ Transaction – individual income/expense entry
 
 ---
 
-### 💻 Development Notes
+# 💻 Development Notes
 
 - All protected endpoints rely on JWT authentication
 
@@ -190,7 +215,7 @@ Transaction – individual income/expense entry
 
 ---
 
-### 🧪 Future Enhancements
+# 🧪 Future Enhancements
 
 ✅ Budget alerts & warnings
 
@@ -204,17 +229,17 @@ Transaction – individual income/expense entry
 
 ---
 
-### 🧍 Author
+# 🧍 Author
 
-# Josh Lee
+## Josh Lee
 👨‍💻 Computer Science Graduate | Software Engineer
 📧 joshjlee1003@gmail.com
 
-# 🌐 LinkedIn
+## 🌐 LinkedIn
 
 www.linkedin.com/in/joshuajlee1003
 
-# 🏁 License
+## 🏁 License
 
 This project is not licensed
 
