@@ -25,6 +25,7 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
 
+  const displayAmount = Math.abs(budget.amount);
 
   // DELETE function
   const handleDelete = async () => {
@@ -48,43 +49,58 @@ export default function BudgetCard({ budget, onDeleted, onUpdated}: Props) {
 
   
   return (
-    <div className="border rounded p-4 shadow flex flex-col gap-2">
-      <div>
-        <h3 className="font-semibold text-lg">{budget.name}</h3>
-        <p>Amount: ${budget.amount}</p>
-        <p>Period: {budget.period}</p>
-        <p>Category: {budget.category_name}</p>
+    <div className="border rounded-lg p-3 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="font-medium truncate">{budget.name}</p>
+          <p className="text-xs text-gray-500">
+            {budget.period} • {budget.category_name}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="text-right">
+            <p>
+              {displayAmount.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
+            </p>
+          </div>
+
+          <div className="flex gap-1">
+            <Button size="sm" type="button" onClick={() => setEditing((v) => !v)}>
+              {editing ? "Close" : "Edit"}
+            </Button>
+
+            <Button
+              size="sm"
+              type="button"
+              onClick={handleDelete}
+              disabled={loading}
+              variant="destructive"
+              title="Delete"
+            >
+              {loading ? "…" : "✕"}
+            </Button>
+          </div>
+        </div>
       </div>
 
-      <div className="flex gap-2 items-center">
-        <Button
-          type="button"
-          onClick={handleDelete}
-          disabled={loading}
-          variant="destructive"
-        >
-          {loading ? "Deleting..." : "Delete"}
-        
-        </Button>
-
-         {error && <span className="text-red-500 text-sm">{error}</span>}
-      </div>
-
-      <div className="flex gap-2 items-center">
-        <Button type="button" onClick={() => setEditing(true)}>
-          Edit
-        </Button>
-
-        {editing && (
+      {editing && (
+        <div className="mt-3">
           <EditBudgetForm
             budget={budget}
             onSuccess={() => {
-                setEditing(false);
-                onUpdated?.();
-              }}
-            />
-          )}
-       </div>
+              setEditing(false);
+              onUpdated?.();
+            }}
+          />
+        </div>
+      )}
+
+      {/* Error */}
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
     </div>
   );
 }

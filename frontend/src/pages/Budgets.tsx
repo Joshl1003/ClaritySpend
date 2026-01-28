@@ -33,12 +33,6 @@ export default function BudgetPage() {
     }
 };
 
-  const mockData = [
-    { category: "Food", amount: 250 },
-    { category: "Entertainment", amount: 150 },
-    { category: "Transport", amount: 100 },
-  ];
-
   useEffect(() => {
     fetchBudgets();
   }, []);
@@ -68,9 +62,6 @@ export default function BudgetPage() {
           />
         ))}
       </div>
-
-      <h2 className="text-xl font-bold mb-4">Spending Overview</h2>   
-      <SpendingChart data={mockData} />  
     </div>
     
   );
