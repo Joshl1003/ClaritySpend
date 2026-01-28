@@ -19,6 +19,7 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
   const [loading, setLoading] = useState(false);
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [txType, setTxType] = useState<"expense" | "income">("expense");
 
   useEffect(() => {
     const load = async () => {
@@ -56,9 +57,11 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
 
     setLoading(true);
 
+    const raw = Math.abs(Number(amount));
+    const signedAmount = txType === "income" ? -raw : raw;
     const payload = {
       description,
-      amount: Number(amount),
+      amount: signedAmount,
       date,
       category_id: categoryId,
     };
@@ -68,6 +71,7 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
       setDescription("");
       setAmount("");
       setDate("");
+      setTxType("expense")
       onSuccess();
     } catch (err: any) {
       const detail =
@@ -113,6 +117,18 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
           }
           className="border p-2 w-40"
         />
+      </div>
+
+      <div className="flex gap-2 items-center">
+        <label className="text-sm w-20">Type</label>
+        <select
+          value={txType}
+          onChange={(e) => setTxType(e.target.value as "expense" | "income")}
+          className="border p-2 flex-1"
+        >
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
+        </select>
       </div>
 
       {/* Category dropdown */}
