@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import { updateBudget } from "@/services/BudgetService";
+import { getCategories, type Category } from "@/services/CategoryService";
 
 interface Budget {
     id: number;
@@ -21,19 +22,63 @@ export default function EditBudgetForm({ budget, onSuccess }: EditBudgetFormProp
   const [name, setName] = useState(budget.name);
   const [amount, setAmount] = useState<number | "">(budget.amount);
   const [period, setPeriod] = useState<string>(budget.period ?? "");
+
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [categoryId, setCategoryId] = useState<number | "">(
+    budget.category_id ?? ""
+  );
+
   const [loading, setLoading] = useState(false);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+      let alive = true;
+  
+      const load = async () => {
+        setLoadingCategories(true);
+        try {
+          const data = await getCategories();
+          if (!alive) return;
+          setCategories(data);
+  
+        } catch (err) {
+          console.error("Error fetching categories:", err);
+          if (!alive) return;
+          setError("Failed to load categories");
+        } finally {
+          if (!alive) return;
+          setLoadingCategories(false);
+        }
+      };
+  
+      load();
+      return () => {
+        alive = false;
+      };
+    }, [budget.category_id]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+
+    if (amount === "" || Number.isNaN(Number(amount))) {
+      setError("Please enter a valid amount");
+      return;
+    }
+
+    if (categoryId === "") {
+      setError("Please select a category");
+      return;
+    }
+
     setLoading(true);
 
     const payload = {
       name,           
       amount: Number(amount),
       period,
-      category_id: budget.category_id,
+      category_id: categoryId,
     };
 
     try {
@@ -56,6 +101,27 @@ export default function EditBudgetForm({ budget, onSuccess }: EditBudgetFormProp
         onSubmit={handleSubmit} 
         className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-lg"
     >
+      <div className="flex gap-2 items-center">
+        <label className="text-sm w-20">Category</label>
+        <select
+          value={categoryId}
+          onChange={(e) => setCategoryId(Number(e.target.value))}
+          className="border p-2 flex-1"
+          disabled={loadingCategories}
+        >
+          {loadingCategories && <option>Loading categories...</option>}
+          {!loadingCategories && categories.length === 0 && (
+            <option value="">No categories found</option>
+          )}
+          {!loadingCategories &&
+            categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+        </select>
+      </div>
+
       <div className="flex gap-2">
         <input
           type="text"
@@ -87,7 +153,7 @@ export default function EditBudgetForm({ budget, onSuccess }: EditBudgetFormProp
       </div>
 
       <div className="flex gap-2 items-center">
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading || loadingCategories}>
           {loading ? "Saving..." : "Save Changes"}
         </Button>
         {error && <span className="text-red-500 text-sm">{error}</span>}
