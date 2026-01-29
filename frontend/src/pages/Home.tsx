@@ -7,6 +7,7 @@ export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
 
   const fetchTransactions = async () => {
     setLoading(true);
@@ -42,10 +43,15 @@ export default function Home() {
     return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
   });
 
-  const monthlySpending = thisMonthTransactions.reduce((sum, tx) => sum + tx.amount, 0);
-  const totalTransactions = thisMonthTransactions.length;
-  const avgTransaction = totalTransactions > 0 ? monthlySpending / totalTransactions : 0;
+  const thisMonthExpenses = thisMonthTransactions.filter(
+    (tx) => tx.amount > 0
+  );
 
+  const monthlySpending = thisMonthExpenses.reduce((sum, tx) => sum + tx.amount, 0);
+  const totalExpenses = thisMonthExpenses.length;
+  const avgTransaction =
+    totalExpenses > 0 ? monthlySpending / totalExpenses : 0;
+    
   // mock budget used percent
   const mockBudgetLimit = 2000;
   const budgetUsedPercent = mockBudgetLimit
@@ -131,10 +137,10 @@ export default function Home() {
                   </div>
                   <div
                     className={`font-semibold ${
-                      tx.amount >= 0 ? "text-emerald-600" : "text-red-500"
+                      tx.amount < 0 ? "text-emerald-600" : "text-red-500"
                     }`}
                   >
-                    {tx.amount.toLocaleString("en-US", {
+                    {Math.abs(tx.amount).toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
