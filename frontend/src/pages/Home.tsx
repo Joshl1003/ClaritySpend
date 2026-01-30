@@ -52,24 +52,11 @@ export default function Home() {
   const totalExpenses = thisMonthExpenses.length;
   const avgTransaction =
     totalExpenses > 0 ? monthlySpending / totalExpenses : 0;
-    
-  // mock budget used percent
-  const mockBudgetLimit = 2000;
-  const budgetUsedPercent = mockBudgetLimit
-    ? Math.min(100, Math.round((monthlySpending / mockBudgetLimit) * 100))
-    : 0;
 
   const recentTransactions = [...transactions]
     .filter((t) => !!t.date)
     .sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime())
     .slice(0, 5);
-
-  const mockChartData = [
-    { category: "Food", amount: 250 },
-    { category: "Entertainment", amount: 150 },
-    { category: "Transport", amount: 120 },
-    { category: "Bills", amount: 400 },
-  ];
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
