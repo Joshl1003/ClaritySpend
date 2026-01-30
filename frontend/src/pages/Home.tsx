@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SpendingChart from "@/components/SpendingChart";
+import BudgetUsageList from "@/components/Budget/BudgetUsageList"; 
 
 import { getTransactions, type Transaction } from "@/services/TransactionService";
 
@@ -113,6 +114,15 @@ export default function Home() {
             Assuming a ${mockBudgetLimit.toLocaleString()} monthly budget
           </p>
         </div>
+      </div>
+
+      {/* BudgetUsageList (uses same month/year + fetched transactions) */}
+      <div className="mb-8">
+        <BudgetUsageList
+          transactions={transactions}
+          month={thisMonth}
+          year={thisYear}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
