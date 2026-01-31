@@ -38,25 +38,46 @@ export default function Home() {
   const thisMonth = now.getMonth();
   const thisYear = now.getFullYear();
 
+  // transactions made during current month
   const thisMonthTransactions = transactions.filter((tx) => {
     if (!tx.date) return false;
     const d = new Date(tx.date);
     return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
   });
 
+  // current month expenses
   const thisMonthExpenses = thisMonthTransactions.filter(
     (tx) => tx.amount > 0
   );
-
   const monthlySpending = thisMonthExpenses.reduce((sum, tx) => sum + tx.amount, 0);
-  const totalExpenses = thisMonthExpenses.length;
-  const avgTransaction =
-    totalExpenses > 0 ? monthlySpending / totalExpenses : 0;
 
+  // money earned this month
+  const thisMonthEarnings = thisMonthTransactions.filter(
+    (tx) => tx.amount < 0
+  );
+  const monthlyEarnings = Math.abs(thisMonthEarnings.reduce((sum, tx) => sum + tx.amount, 0));
+  
+  // total cash flow (income subtracted by expenses)
+  const cashFlow = monthlyEarnings - monthlySpending;
+
+  const spendingByCategory = thisMonthExpenses.reduce((acc, tx) => {
+    const name = tx.category_name ?? "Uncategorized";
+    acc[name] = (acc[name] ?? 0) + tx.amount;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const chartData = Object.entries(spendingByCategory)
+    .map(([category, amount]) => ({ category, amount }))
+    .sort((a, b) => b.amount - a.amount)
+    .slice(0, 6); // top 6 categories, keeps chart readable
+
+  
+  // list of recent transactions made
   const recentTransactions = [...transactions]
     .filter((t) => !!t.date)
     .sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime())
     .slice(0, 5);
+
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
@@ -75,41 +96,57 @@ export default function Home() {
             })}
           </p>
           <p className="text-xs text-gray-400 mt-1">
-            Based on {thisMonthTransactions.length} transaction
-            {thisMonthTransactions.length === 1 ? "" : "s"} this month
+            Based on {thisMonthExpenses.length} transaction
+            {thisMonthExpenses.length === 1 ? "" : "s"} this month
           </p>
         </div>
 
         <div className="bg-white shadow-md rounded-xl p-6">
-          <h2 className="text-gray-500 text-sm font-medium">Average Transaction</h2>
+          <h2 className="text-gray-500 text-sm font-medium">Monthly Earnings</h2>
           <p className="text-2xl font-semibold mt-2">
-            {avgTransaction.toLocaleString("en-US", {
+            {monthlyEarnings.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}
+          </p>
+          <p className="text-xs text-gray-400 mt-1">
+            Based on {thisMonthEarnings.length} transaction
+            {thisMonthEarnings.length === 1 ? "" : "s"} this month
+          </p>
+        </div>
+
+        <div className="bg-white shadow-md rounded-xl p-6">
+          <h2 className="text-gray-500 text-sm font-medium">Net Cash Flow</h2>
+          <p className="text-2xl font-semibold mt-2">
+            {cashFlow.toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
               maximumFractionDigits: 2,
             })}
           </p>
           <p className="text-xs text-gray-400 mt-1">
-            Simple average of this month&apos;s transactions
-          </p>
-        </div>
-
-        <div className="bg-white shadow-md rounded-xl p-6">
-          <h2 className="text-gray-500 text-sm font-medium">Budget Used (mock)</h2>
-          <p className="text-2xl font-semibold mt-2">{budgetUsedPercent}%</p>
-          <p className="text-xs text-gray-400 mt-1">
-            Assuming a ${mockBudgetLimit.toLocaleString()} monthly budget
+            Net income from this month&apos;s transactions
           </p>
         </div>
       </div>
 
-      {/* BudgetUsageList (uses same month/year + fetched transactions) */}
-      <div className="mb-8">
-        <BudgetUsageList
-          transactions={transactions}
-          month={thisMonth}
-          year={thisYear}
-        />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        {/* Budget usage list */}
+        <div className="lg:col-span-2">
+          <BudgetUsageList
+            transactions={transactions}
+            month={thisMonth}
+            year={thisYear}
+          />
+        </div>
+
+        {/* Transactions chart */}
+        <div className="bg-white shadow-md rounded-xl p-6">
+          <h2 className="text-lg font-semibold mb-4">
+            Spending by Category
+          </h2>
+          <SpendingChart data={chartData} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -146,30 +183,6 @@ export default function Home() {
               ))}
             </ul>
           )}
-        </div>
-
-        <div className="bg-white shadow-md rounded-xl p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Spending by Category
-          </h2>
-
-          <div className="text-sm text-gray-500">
-            {mockChartData.map((item) => (
-              <div key={item.category} className="flex justify-between mb-2 text-sm">
-                <span>{item.category}</span>
-                <span>
-                  {item.amount.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
-                </span>
-              </div>
-            ))}
-            <p className="text-xs text-gray-400 mt-4">
-              TODO: Replace this block with a real Chart.js donut or bar chart using
-              actual category totals.
-            </p>
-          </div>
         </div>
       </div>
     </div>
