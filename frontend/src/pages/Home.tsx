@@ -131,60 +131,51 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {/* Middle left: Budget usage list */}
-        <div className="lg:col-span-2">
-          <BudgetUsageList
-            transactions={transactions}
-            month={thisMonth}
-            year={thisYear}
-          />
-        </div>
-
-        {/* Middle right: Transactions chart */}
-        <div className="bg-white shadow-md rounded-xl p-6">
-          <h2 className="text-lg font-semibold mb-4">
-            Spending by Category
-          </h2>
-          <SpendingChart data={chartData} />
-        </div>
-      </div>
-
-      {/* Bottom: recent transactions list */}     
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="bg-white shadow-md rounded-xl p-6 lg:col-span-2">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Recent Transactions
-          </h2>
+        {/* Left column stack */}
+        <div className="lg:col-span-2 flex flex-col gap-3">
+          <BudgetUsageList transactions={transactions} month={thisMonth} year={thisYear} />
 
-          {recentTransactions.length === 0 ? (
-            <p className="text-gray-500 text-sm">
-              No transactions yet. Add one on the Transactions page.
-            </p>
-          ) : (
-            <ul className="divide-y divide-gray-100">
-              {recentTransactions.map((tx) => (
-                <li key={tx.id} className="py-3 flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-gray-800">{tx.description}</p>
-                    <p className="text-xs text-gray-400">
-                      {tx.date ? new Date(tx.date).toLocaleDateString() : "No date"}
-                    </p>
-                  </div>
-                  <div
-                    className={`font-semibold ${
-                      tx.amount < 0 ? "text-emerald-600" : "text-red-500"
-                    }`}
-                  >
-                    {Math.abs(tx.amount).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    })}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+          <div className="bg-white shadow-md rounded-xl p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Recent Transactions
+            </h2>
+
+            {recentTransactions.length === 0 ? (
+              <p className="text-gray-500 text-sm">
+                No transactions yet. Add one on the Transactions page.
+              </p>
+            ) : (
+              <ul className="divide-y divide-gray-100">
+                {recentTransactions.map((tx) => (
+                  <li key={tx.id} className="py-3 flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-gray-800">{tx.description}</p>
+                      <p className="text-xs text-gray-400">
+                        {tx.date ? new Date(tx.date).toLocaleDateString() : "No date"}
+                      </p>
+                    </div>
+                    <div
+                      className={`font-semibold ${
+                        tx.amount < 0 ? "text-emerald-600" : "text-red-500"
+                      }`}
+                    >
+                      {Math.abs(tx.amount).toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                      })}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div className="bg-white shadow-md rounded-xl p-6">
+          <h2 className="text-lg font-semibold mb-4">Spending by Category</h2>
+          <SpendingChart data={chartData} />
         </div>
       </div>
     </div>
