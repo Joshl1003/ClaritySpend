@@ -15,7 +15,8 @@ export async function getTransactions(params?: { limit?: number }) {
   return res.data;
 }
 
-export async function createTransaction(payload: { description: string; category_id: number; amount: number; date?: string }) {
+export async function createTransaction(payload: { description: string; 
+  category_id: number; amount: number; date?: string }) {
   const res = await api.post<Transaction>("/transactions/", payload);
   return res.data;
 }

@@ -15,7 +15,8 @@ export async function getBudgets() {
   return res.data;
 }
 
-export async function createBudget(payload: { name: string; category_id: number; amount: number; period?: string }) {
+export async function createBudget(payload: { name: string; category_id: number; 
+  amount: number; period?: string }) {
   const res = await api.post<Budget>("/budgets/", payload);
   return res.data;
 }

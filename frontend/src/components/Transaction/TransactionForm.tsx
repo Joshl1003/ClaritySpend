@@ -57,6 +57,7 @@ export default function TransactionForm({ onSuccess }: TransactionFormProps) {
 
     setLoading(true);
 
+    // Income is negative, expense is positive
     const raw = Math.abs(Number(amount));
     const signedAmount = txType === "income" ? -raw : raw;
     const payload = {

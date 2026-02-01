@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import BudgetForm from "@/components/Budget/BudgetForm";
 import BudgetCard from "@/components/Budget/BudgetCard";
-import SpendingChart from "@/components/SpendingChart";
 
 import { getBudgets, type Budget } from "@/services/BudgetService";
 import { useAuth } from "@/auth/useAuth";
@@ -47,7 +46,7 @@ export default function BudgetPage() {
         <BudgetForm
           onSuccess={async () => {
             await fetchBudgets();
-            setShowForm(false);   // closes the form after successful create
+            setShowForm(false);   // closes form after successful create
           }}
         />
       )}
@@ -57,8 +56,8 @@ export default function BudgetPage() {
           <BudgetCard
             key={b.id}
             budget={b}
-            onDeleted={fetchBudgets}  // refresh after delete
-            onUpdated={fetchBudgets} // refresh after update
+            onDeleted={fetchBudgets}  
+            onUpdated={fetchBudgets} 
           />
         ))}
       </div>

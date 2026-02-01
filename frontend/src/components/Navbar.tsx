@@ -23,7 +23,7 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-4 h-14 flex items-center gap-4">
         {/* Brand */}
         <Link
-          to="/home"
+          to="/"
           className="text-lg font-bold text-emerald-600 hover:text-emerald-700"
         >
           ClaritySpend

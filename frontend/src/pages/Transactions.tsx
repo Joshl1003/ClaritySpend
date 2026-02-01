@@ -48,7 +48,7 @@ export default function Transactions() {
         <TransactionForm
           onSuccess={async () => {
             await fetchTransactions();
-            setShowForm(false);   // closes the form after successful create
+            setShowForm(false); 
           }}
         />
       )}
@@ -58,8 +58,8 @@ export default function Transactions() {
           <TransactionCard
             key={t.id}
             transaction={t}
-            onDeleted={fetchTransactions}  // refresh after delete
-            onUpdated={fetchTransactions} // refresh after update
+            onDeleted={fetchTransactions}  
+            onUpdated={fetchTransactions}
           />
         ))}
       </div>

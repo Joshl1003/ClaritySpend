@@ -51,7 +51,7 @@ export default function Home() {
   );
   const monthlySpending = thisMonthExpenses.reduce((sum, tx) => sum + tx.amount, 0);
 
-  // money earned this month
+  //current month earnings
   const thisMonthEarnings = thisMonthTransactions.filter(
     (tx) => tx.amount < 0
   );
@@ -69,7 +69,7 @@ export default function Home() {
   const chartData = Object.entries(spendingByCategory)
     .map(([category, amount]) => ({ category, amount }))
     .sort((a, b) => b.amount - a.amount)
-    .slice(0, 6); // top 6 categories, keeps chart readable
+    .slice(0, 6); // top 6 categories
 
   
   // list of recent transactions made
@@ -86,6 +86,7 @@ export default function Home() {
       {loading && <p className="text-gray-600 mb-4">Loading dashboard...</p>}
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
+      {/* Top: financial statistics for month*/}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white shadow-md rounded-xl p-6">
           <h2 className="text-gray-500 text-sm font-medium">Monthly Spending</h2>
@@ -131,7 +132,7 @@ export default function Home() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        {/* Budget usage list */}
+        {/* Middle left: Budget usage list */}
         <div className="lg:col-span-2">
           <BudgetUsageList
             transactions={transactions}
@@ -140,7 +141,7 @@ export default function Home() {
           />
         </div>
 
-        {/* Transactions chart */}
+        {/* Middle right: Transactions chart */}
         <div className="bg-white shadow-md rounded-xl p-6">
           <h2 className="text-lg font-semibold mb-4">
             Spending by Category
@@ -149,6 +150,7 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Bottom: recent transactions list */}     
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="bg-white shadow-md rounded-xl p-6 lg:col-span-2">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">

@@ -48,7 +48,7 @@ export default function CategoryPage() {
         <CategoryForm
           onSuccess={async () => {
             await fetchCategories();
-            setShowForm(false);   // closes the form after successful create
+            setShowForm(false);   // closes form after successful create
           }}
         />
       )}
@@ -58,8 +58,8 @@ export default function CategoryPage() {
           <CategoryCard
             key={c.id}
             category={c}
-            onDeleted={fetchCategories}  // refresh after delete
-            onUpdated={fetchCategories} // refresh after update
+            onDeleted={fetchCategories}  
+            onUpdated={fetchCategories} 
           />
         ))}
       </div> 
