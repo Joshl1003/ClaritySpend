@@ -5,8 +5,15 @@ ClaritySpend is a modern **personal finance web application** that helps users t
 Built with a clean **FastAPI backend** and a **React + TypeScript frontend**, ClaritySpend focuses on simplicity, usability, and real-time financial management.
 
 ---
+## 🎯 Motivation
 
-# Demo & Screenshots
+ClaritySpend was built to explore real-world full-stack development in the fintech space.
+The goal was to design a clean, production-style budgeting application that emphasizes
+data integrity, user experience, and scalable backend architecture.
+
+---
+
+## 🎥 Demo
 (Coming soon — dashboard, budgets, and transaction views)
 ---
 
@@ -20,6 +27,9 @@ Built with a clean **FastAPI backend** and a **React + TypeScript frontend**, Cl
 - Create, edit, and delete transactions
 - Categorize transactions for budgeting and analytics
 - Date-based filtering and sorting support
+- Expenses are stored as positive values
+- Income is stored as negative values
+- This enables clean aggregation for spending, budgets, and analytics
 
 ## 📊 Budgets
 - Category-based budgets
@@ -53,7 +63,6 @@ Built with a clean **FastAPI backend** and a **React + TypeScript frontend**, Cl
 - ShadCN UI + Lucide React Icons
 - React Router DOM 7.9.3
 - PostCSS & CSS animation utilities
-- Type-safe component merging and styling utilities
 - chart.js react-chartjs-2
 
 
@@ -204,29 +213,34 @@ Transaction – individual income/expense entry
 ---
 
 # 💻 Development Notes
-
+- Ensure PostgreSQL is running before starting the backend
+- Backend runs on http://localhost:8000
+- Frontend runs on http://localhost:5173
+- JWT tokens are stored client-side for authenticated requests
 - All protected endpoints rely on JWT authentication
-
 - Frontend API calls use a centralized Axios client with interceptors
-
 - Schemas (Pydantic models) handle request validation and response shaping.
 
-- ShadCN UI provides ready-made, styled React components.
+---
+
+# ## 🚀 Project Status
+
+ClaritySpend is considered feature-complete for v1.
+Future updates may include additional analytics, filtering, and UX improvements,
+but the core budgeting and transaction workflows are stable and usable.
 
 ---
 
 # 🧪 Future Enhancements
 
-✅ Budget alerts & warnings
+These features are planned but intentionally excluded from v1
+to prioritize stability and clarity.
 
-📊 Add visual analytics dashboard
-
-💾 CSV export for transactions
-
-🌙 Implement light/dark theme toggle
-
-☁️ Deploy using Render / Vercel / Railway
-
+- Pagination & search for transactions
+- Advanced analytics (category pie charts, trends)
+- CSV export
+- Dark mode
+- Cloud deployment
 ---
 
 # 🧍 Author

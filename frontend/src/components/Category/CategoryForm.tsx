@@ -18,7 +18,6 @@ export default function CategoryForm({ onSuccess }: CategoryFormProps) {
 
     const payload = {
       name,           
-      user_id: 1,
     };
 
     try {
