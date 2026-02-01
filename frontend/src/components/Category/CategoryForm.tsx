@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { createCategory } from "@/services/CategoryService";
 
 interface CategoryFormProps {
   onSuccess: () => void; // called after successful create
@@ -21,31 +22,21 @@ export default function CategoryForm({ onSuccess }: CategoryFormProps) {
     };
 
     try {
-      const res = await fetch("http://localhost:8000/categories/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const body = await res.text();
-        console.error("Create category failed:", res.status, body);
-        setError("Failed to create category");
-        return;
-      }
-
-      // reset form
-      setName("");
-
-      // tell parent so it can refetch + close
-      onSuccess();
-    } catch (err) {
-      console.error("Error creating category:", err);
-      setError("Network error");
-    } finally {
-      setLoading(false);
-    }
-  };
+          await createCategory(payload);
+          setName("");
+          onSuccess();
+        } catch (err: any) {
+          const detail =
+            err?.response?.data?.detail ||
+            err?.message ||
+            "Failed to create category";
+          console.error("Create category failed:", err);
+          setError(String(detail));
+        } finally {
+          setLoading(false);
+        }
+      };
+    
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-lg">

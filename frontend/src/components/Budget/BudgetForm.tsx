@@ -5,7 +5,7 @@ import { getCategories, type Category } from "@/services/CategoryService";
 import { createBudget } from "@/services/BudgetService";
 
 interface BudgetFormProps {
-  onSuccess: () => void; // called after successful create
+  onSuccess: () => void; 
 }
 
 export default function BudgetForm({ onSuccess }: BudgetFormProps) {

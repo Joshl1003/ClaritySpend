@@ -101,6 +101,7 @@ export default function EditBudgetForm({ budget, onSuccess }: EditBudgetFormProp
         onSubmit={handleSubmit} 
         className="p-4 border rounded-lg mt-4 flex gap-2 flex-col max-w-lg"
     >
+      {/* Category dropdown */}
       <div className="flex gap-2 items-center">
         <label className="text-sm w-20">Category</label>
         <select

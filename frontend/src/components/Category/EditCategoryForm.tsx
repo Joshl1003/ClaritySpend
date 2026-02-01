@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { updateCategory } from "@/services/CategoryService";
 
 interface Category {
     id: number;
@@ -9,7 +10,7 @@ interface Category {
 
 interface EditCategoryFormProps {
     category: Category;
-  onSuccess: () => void; // called after successful create
+  onSuccess: () => void; 
 }
 
 export default function EditCategoryForm({ category, onSuccess }: EditCategoryFormProps) {
@@ -27,27 +28,19 @@ export default function EditCategoryForm({ category, onSuccess }: EditCategoryFo
     };
 
     try {
-      const res = await fetch(`http://localhost:8000/categories/${category.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) {
-        const body = await res.text();
-        console.error("Update categories failed:", res.status, body);
-        setError("Failed to update categories");
-        return;
-      }
-
-      onSuccess();
-    } catch (err) {
-      console.error("Error updating category:", err);
-      setError("Network error");
-    } finally {
-      setLoading(false);
-    }
-  };
+          await updateCategory(payload); 
+          onSuccess();
+        } catch (err: any) {
+          const detail =
+            err?.response?.data?.detail ||
+            err?.message ||
+            "Failed to update category";
+          console.error("Error updating category:", err);
+          setError(String(detail));
+        } finally {
+          setLoading(false);
+        }
+      };
 
   return (
     <form 

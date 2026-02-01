@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import EditCategoryForm from "@/components/Category/EditCategoryForm";
+import { deleteCategory } from "@/services/CategoryService";
 
 interface Category {
   name: string
@@ -26,31 +27,19 @@ export default function CategoryCard({ category, onDeleted, onUpdated}: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:8000/categories/${category.id}`, 
-        {
-          method: "DELETE",
+          await deleteCategory(category.id); 
+          onDeleted?.();
+        } catch (err: any) {
+          const detail =
+            err?.response?.data?.detail ||
+            err?.message ||
+            "Failed to delete category";
+          console.error("Error deleting category:", err);
+          setError(String(detail));
+        } finally {
+          setLoading(false);
         }
-      );
-
-      if (!res.ok) {
-        const body = await res.text();
-        console.error("Delete category failed:", res.status, body);
-        setError("Failed to delete category");
-        return;
-      }
-
-      if (onDeleted) {
-        onDeleted();
-      }
-    } 
-    catch (err) {
-      console.error("Error deleting category:", err);
-      setError("Network error");
-    } 
-    finally {
-      setLoading(false);
-    }
-  };
+      };
 
   
   return (
