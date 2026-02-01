@@ -21,6 +21,14 @@ export default function Navbar() {
   return (
     <div className="w-full border-b">
       <div className="mx-auto max-w-7xl px-4 h-14 flex items-center gap-4">
+        {/* Brand */}
+        <Link
+          to="/home"
+          className="text-lg font-bold text-emerald-600 hover:text-emerald-700"
+        >
+          ClaritySpend
+        </Link>
+
         {/* Left: main nav */}
         <NavigationMenu>
           <NavigationMenuList className="flex items-center gap-2">
