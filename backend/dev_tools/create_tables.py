@@ -1,5 +1,3 @@
-# app/create_tables.py
-
 """
 Run this script to create all database tables based on your SQLAlchemy models.
 
@@ -8,7 +6,7 @@ Usage (from backend folder, with venv active):
 """
 
 from app.database.database import Base, engine
-import app.models  # 👈 this ensures all model classes are imported & registered with Base
+import app.models  # ensures all model classes are imported & registered with Base
 
 
 def create_tables() -> None:

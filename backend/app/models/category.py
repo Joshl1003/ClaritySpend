@@ -8,5 +8,3 @@ class Category(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(120), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=True)  # null if global category
-
-    # transactions = relationship("Transaction", back_populates="category") ??

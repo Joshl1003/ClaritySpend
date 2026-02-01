@@ -12,8 +12,6 @@ class Transaction(Base):
     date = Column(DateTime, default=datetime.utcnow)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
-
-    # user = relationship("User", backref="transactions")
     category = relationship("Category", lazy="selectin")
     
     @property

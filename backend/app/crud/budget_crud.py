@@ -11,8 +11,10 @@ def list_budgets(db, user_id: int):
         .all()
     )
 
-def create_budget(db: Session, name: str, user_id: int, category_id: int | None, amount: float, period: str = "monthly"):
-    b = Budget(name=name, user_id=user_id, category_id=category_id, amount=amount, period=period)
+def create_budget(db: Session, name: str, user_id: int, category_id: int | None, 
+                  amount: float, period: str = "monthly"):
+    b = Budget(name=name, user_id=user_id, category_id=category_id, 
+               amount=amount, period=period)
     db.add(b)
     db.commit()
     db.refresh(b)
