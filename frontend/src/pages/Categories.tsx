@@ -16,8 +16,6 @@ export default function CategoryPage() {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
-  const [visibleCount, setVisibleCount] = useState(10);
-
   const fetchCategories = async () => {
   try {
       const data = await getCategories();

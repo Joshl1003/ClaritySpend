@@ -21,7 +21,7 @@ export async function deleteCategory(id: number) {
   return res.data;
 }
 
-export async function updateCategory(payload: { name: string; }) {
-  const res = await api.put<Category>("/categories/", payload);
+export async function updateCategory(id: number, payload: { name: string; }) {
+  const res = await api.put<Category>(`/categories/${id}/`, payload);
   return res.data;
 }

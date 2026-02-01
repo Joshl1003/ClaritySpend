@@ -21,17 +21,19 @@ def create_category(db, name: str, user_id: int = None):
     return c
 
 def delete_category(db: Session, category_id: int, current_user_id: int):
-    c = db.get(Category, category_id)
+    c = (
+        db.query(Category)
+        .filter(Category.id == category_id)
+        .first()
+    )
     if not c:
         raise HTTPException(status_code=404, detail="Category not found")
 
-    # Disallow deleting global defaults
     if c.user_id is None:
-        raise HTTPException(status_code=403, detail="Cannot delete default category")
+        raise HTTPException(status_code=403, detail="Cannot delete default categories")
 
-    # Disallow deleting other people's categories
     if c.user_id != current_user_id:
-        raise HTTPException(status_code=403, detail="Not allowed")
+        raise HTTPException(status_code=403, detail="Not authorized")
 
     db.delete(c)
     db.commit()

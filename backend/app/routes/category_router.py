@@ -9,16 +9,18 @@ from app.models.user import User
 router = APIRouter(prefix="/categories", tags=["Categories"])
 
 @router.post("/", response_model=CategoryOut)
-def create_category_endpoint(payload: CategoryCreate, db: Session = Depends(get_db)):
-    return create_category(db, name=payload.name, user_id=payload.user_id)
+def create_category_endpoint(payload: CategoryCreate, current_user: User = Depends(get_current_user), 
+                             db: Session = Depends(get_db)):
+    return create_category(db, name=payload.name, user_id=current_user.id)
 
 @router.get("/", response_model=list[CategoryOut])
 def list_categories_endpoint(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return list_categories(db, user_id=current_user.id)
 
 @router.delete("/{category_id}/", response_model=CategoryOut)
-def delete_category_endpoint(category_id: int, db: Session = Depends(get_db)):
-    return delete_category(db, category_id)
+def delete_category_endpoint(category_id: int, db: Session = Depends(get_db), 
+                             current_user: User = Depends(get_current_user)):
+    return delete_category(db, category_id, current_user_id=current_user.id)
 
 @router.put("/{category_id}/", response_model=CategoryOut)
 def edit_category_endpoint(category_id: int, payload: CategoryUpdate, db: Session = Depends(get_db)):

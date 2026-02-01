@@ -28,7 +28,7 @@ export default function EditCategoryForm({ category, onSuccess }: EditCategoryFo
     };
 
     try {
-          await updateCategory(payload); 
+          await updateCategory(category.id, payload); 
           onSuccess();
         } catch (err: any) {
           const detail =
