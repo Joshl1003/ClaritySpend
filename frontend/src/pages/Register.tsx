@@ -95,7 +95,7 @@ export default function RegisterPage() {
             <p className="text-sm text-muted-foreground">
                 Have an account?{" "}
               <Link to="/login" className="underline underline-offset-4">
-                Sign up
+                Sign in
               </Link>
             </p>
           </form>

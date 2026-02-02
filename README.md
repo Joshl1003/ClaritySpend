@@ -13,8 +13,21 @@ data integrity, user experience, and scalable backend architecture.
 
 ---
 
-## 🎥 Demo
-(Coming soon — dashboard, budgets, and transaction views)
+## 📸 Screenshots
+### Dashboard Overview
+![Dashboard](screenshots/Home_page.png)
+
+### Authentication
+![Budget Usage](screenshots/Login_page.png)
+
+### Transactions Management
+![Transactions](screenshots/Transaction_page.png)
+
+### Budgets Management
+![Budgets](screenshots/Budget_page.png)
+
+### Categories
+![Categories](screenshots/Category_page.png)
 ---
 
 # Key Features
