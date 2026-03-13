@@ -22,6 +22,13 @@ Thumbs.db
 # Logs and other
 *.log
 agenda.txt
+aws-resources.txt
+secret.json
+oac-config.json
+cloudfront-config.json
+bucket-policy.json
+cf-updated.json
+ecs-task-definition.json
 
 # Node/React (frontend)
 frontend/node_modules/

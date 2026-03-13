@@ -15,7 +15,7 @@ export async function getTransactions(params?: { limit?: number }) {
   return res.data;
 }
 
-export async function createTransaction(payload: { description: string; 
+export async function createTransaction(payload: { description: string;
   category_id: number; amount: number; date?: string }) {
   const res = await api.post<Transaction>("/transactions/", payload);
   return res.data;
@@ -35,6 +35,6 @@ export async function updateTransaction(
     category_id?: number | null;
   }
 ) {
-  const res = await api.put(`/transactions/${id}`, payload);
+  const res = await api.put(`/transactions/${id}/`, payload);
   return res.data;
 }

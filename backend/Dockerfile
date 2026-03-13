@@ -7,11 +7,11 @@ RUN apt-get update && apt-get install -y build-essential libpq-dev && rm -rf /va
 WORKDIR /app
 
 # Copy only requirements first for better cache
-COPY backend/requirements.txt /app/requirements.txt
+COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Copy app code
-COPY backend/app /app/app
+COPY app /app/app
 
 # Expose port
 EXPOSE 8000
