@@ -66,6 +66,16 @@ data integrity, user experience, and scalable backend architecture.
 - Dockerized backend, Kubernetes-ready
 - PostgreSQL-backed persistent storage
 
+## ☁️ Cloud Deployment (AWS)
+- Deployed to AWS with full production infrastructure
+- **ECS Fargate** — serverless container hosting for the FastAPI backend
+- **ECR** — Docker image registry for backend container
+- **RDS PostgreSQL** — managed database in a private VPC
+- **ALB** — Application Load Balancer routing traffic to ECS
+- **S3 + CloudFront** — static frontend hosting with HTTPS and global CDN
+- **Secrets Manager** — secure injection of database credentials and JWT secret into ECS tasks
+- **IAM** — least-privilege roles for ECS task execution
+
 ---
 
 # ⚙️ Tech Stack
@@ -86,6 +96,11 @@ data integrity, user experience, and scalable backend architecture.
 - Pydantic 2.11.7 for schema validation
 - Python-dotenv for environment variables
 - Uvicorn for ASGI server
+
+## **Cloud (AWS)**
+- ECS Fargate, ECR, RDS PostgreSQL
+- Application Load Balancer, CloudFront, S3
+- Secrets Manager, IAM, VPC
 
 ---
 
@@ -253,7 +268,7 @@ to prioritize stability and clarity.
 - Advanced analytics (category pie charts, trends)
 - CSV export
 - Dark mode
-- Cloud deployment
+- CI/CD pipeline for automated deployments
 ---
 
 # 🧍 Author
